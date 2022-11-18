@@ -1,0 +1,138 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+hr.hr-text {
+    position: relative;
+    border: none;
+    height: 1px;
+    background: #ced4da; /*#999;*/
+    overflow: visible;
+}
+
+    hr.hr-text::before {
+        content: attr(data-content);
+        display: inline-block;
+        background: #fff;
+        /*font-weight: bold;*/
+        font-size: 0.85rem;
+        color: black !important;
+        border-radius: 30rem;
+        padding: 0.2rem 2rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+.accordion-item {
+    border: none;
+}
+
+.accordion-button {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+    .accordion-button:not(.collapsed) {
+        color: inherit;
+    }
+
+        .accordion-button:not(.collapsed)::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+
+    .accordion-button:focus {
+        border-color: #ced4da;
+        box-shadow: none;
+    }
+
+.accordion-body {
+    padding: 0;
+}
+
+.accordion-button:after {
+    order: -1; /*swap order */
+    margin-left: 0;
+    margin-right: 0.5em; /*just extra space between text and icon*/
+}
+
+div#accordion-add-to-group .accordion-button {
+    padding: 0;
+}
+
+div#accordion-add-to-group .accordion-body {
+    padding: 0;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+.em-2 {
+    width: 2em !important;
+}
+
+.em-6 {
+    width: 6em !important;
+}
+
+.em-10 {
+    width: 10em !important;
+}
+
+.em-14 {
+    width: 14em !important;
+}
+
+.em-25 {
+    width: 25em !important;
+}
+
+tr > td {
+    border-bottom: none;
+}
+
+td > a {
+    color: inherit;
+}
+
+.truncate {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-footer {
+    background-color: transparent;
+}
+
+.dropdown button {
+    padding-left: 0;
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+
+.dropdown-menu {
+    padding: 0;
+}
+
+.dropdown-divider {
+    margin: 0;
+}

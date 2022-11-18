@@ -1,0 +1,166 @@
+﻿@using Microsoft.AspNetCore.Html;
+@model ToDoIndexModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">To Do's</h1>
+    <p>&mdash;&nbsp;Never loose what you want to do again&nbsp;&mdash;</p>
+</div>
+
+<form asp-action="Index">
+    <div class="form-group row mb-3">
+        <div class="col-11">
+            <input asp-for="Text" class="form-control" placeholder="Enter todo's text" />
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+        <div class="col-1">
+            <div class="d-grid">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-borderless table-sm">
+    <thead>
+        <tr>
+            <th scope="col" class="em-2">#</th>
+            <th scope="col" class="em-6 text-center">Actions</th>
+            <th scope="col">To Do</th>
+            <th scope="col">Complete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var todos = this.Model.GetTodos();
+            for (var index = 0; index < todos.Count(); index++)
+            {
+                var item = todos[index];
+                <tr>
+                    <td scope="row">@(index + 1).</td>
+                    <td class="text-center">
+                        <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <span class="truncate">
+                            @item.Text
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="p-0">
+                        <div class="collapse" id="collapse-@index">
+                            <div class="card ml-4 p-2">
+                                <form asp-action="Reminder">
+                                    <input type="hidden" data-todo-id="@item.Id" name="Id" />
+                                    <div class="card-body row">
+                                        <label class="col-2 col-form-label email" style="width: auto">Send a reminder to </label>
+                                        <input asp-for="@item.EMail" class="form-control no-wrap" />
+                                        <input asp-for="@item.Before" class="form-control no-wrap-5rem ms-1" />
+                                        <div class="dropdown no-wrap">
+                                            <button id="dropdownTimeUnit-@(index + 1)" type="button" class="btn btn-secondary dropdown-toggle ps-3" data-bs-toggle="dropdown" data-bs-todo-id="@item.Id" aria-expanded="false">
+                                                Select
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownTimeUnit-@(index + 1)">
+                                                @{
+                                                    foreach (var unit in this.GetTimeUnitNames())
+                                                    {
+                                                        <li><a class="dropdown-item" href="#">@unit</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                        <label class="col-2 col-form-label" style="width: auto">before. Then repeat it every </label>
+                                        <input asp-for="@item.Repeat" class="form-control no-wrap-5rem ms-1" />
+                                        <label id="label-time-units-@(index + 1)" class="col-2 col-form-label" style="width: auto"></label>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary" type="submit">Update</button>
+                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-bs-todo-id="@item.Id">Delete</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="confirmDeleteleModal" tabindex="-1" aria-labelledby="confirmDeleteleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <h5 class="modal-title" id="confirmDeleteleModalLabel">Please, confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this item? The operation is irevertible.
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-delete" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .no-wrap {
+            display: inherit;
+            width: auto;
+        }
+
+        .no-wrap-5rem {
+            display: inherit;
+            max-width: 5rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $('#confirmDeleteleModal').on('show.bs.modal', function (e) {
+            var button = e.relatedTarget;
+            var id = $(button).attr('data-bs-note-id');
+            $('#btn-delete', this).attr('data-bs-note-id', id);
+        });
+
+        $('a.dropdown-item').on('click', function(e) {
+            e.preventDefault();
+            var units = $(this).text();
+            var parent = $(this).closest('div');
+            $('.dropdown-toggle', parent).text(units);
+            var labelTimeUnits = $(parent).parent().children().last();
+            $(labelTimeUnits).text(units);
+        });
+
+        $('#btn-delete').on('click', function () {
+            var id = $(this).attr('data-bs-note-id');
+            $.post('/notes/delete/' + id, function () {
+                window.location.href = '/notes/index';
+            });
+        });
+    </script>
+}
+
+@functions {
+    IHtmlContent GetTimeUnit(ToDoModel.TimeUnit timeUnit, uint before)
+    {
+        var name = Enum.GetName(typeof(ToDoModel.TimeUnit), timeUnit).ToLower();
+        return new HtmlString(before == 1 ? name : name[..(name.Length - 1)]);
+    }
+
+    IEnumerable<string> GetTimeUnitNames()
+    {
+        return Enum.GetNames(typeof(ToDoModel.TimeUnit));
+    }
+}
