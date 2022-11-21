@@ -58,8 +58,8 @@
                                     @Html.Raw(item.Content ?? "No content")
                                 </div>
                                 <div class="card-footer">
-                                    <a title="Edit" class="btn btn-primary" href="/Notes/Edit/@item.Id">Modify</a>
-                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-bs-note-id="@item.Id">Delete</a>
+                                    <a title="Edit" class="btn btn-primary" href="/Note/Edit/@item.Id">Modify</a>
+                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -92,14 +92,19 @@
     <script>
         $('#confirmDeleteleModal').on('show.bs.modal', function (e) {
             var button = e.relatedTarget;
-            var id = $(button).attr('data-bs-note-id');
-            $('#btn-delete', this).attr('data-bs-note-id', id);
+            var id = $(button).attr('data-item-id');
+            $('#btn-delete', this).attr('data-item-id', id);
+        });
+
+        $('td a').on('click', function () {
+            $('i', this).toggleClass('bi-arrow-counterclockwise');
+            $('i', this).toggleClass('bi-arrow-clockwise');
         });
 
         $('#btn-delete').on('click', function () {
-            var id = $(this).attr('data-bs-note-id');
-            $.post('/notes/delete/' + id, function () {
-                window.location.href = '/notes/index';
+            var id = $(this).attr('data-item-id');
+            $.post('/note/delete/' + id, function () {
+                window.location.href = '/note/index';
             });
         });
     </script>

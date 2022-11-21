@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace InfoStore.Controllers
 {
-    public class NotesController : Controller
+    public class NoteController : Controller
     {
         private readonly IQueryHandler<GetNotesQuery, IEnumerable<NoteModel>> getNotes;
         private readonly ICommandHandler<AddNoteCommand, CommandResult> addNote;
@@ -20,7 +20,7 @@ namespace InfoStore.Controllers
         readonly ICommandHandler<UpdateNoteCommand, CommandResult> updateNote;
         readonly ICommandHandler<DeleteNoteCommand, CommandResult> deleteNote;
 
-        public NotesController(IQueryHandler<GetNotesQuery, IEnumerable<NoteModel>> getNotes
+        public NoteController(IQueryHandler<GetNotesQuery, IEnumerable<NoteModel>> getNotes
             , IQueryHandler<GetNoteQuery, NoteModel> getNote
             , ICommandHandler<AddNoteCommand, CommandResult> addNote
             , ICommandHandler<UpdateNoteCommand, CommandResult> updateNote
@@ -81,6 +81,5 @@ namespace InfoStore.Controllers
             this.deleteNote.Handle(new DeleteNoteCommand(id));
             return this.Ok();
         }
-
     }
 }

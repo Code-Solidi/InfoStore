@@ -6,13 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Code\CultrueRewriteMiddleware.cs" />
     <Compile Remove="Data\Entities\BookmarkTags.cs" />
     <Compile Remove="Models\BookmarkModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\ToDo\_ToDo.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Code\CultrueRewriteMiddleware.cs" />
     <None Include="Data\Entities\BookmarkTags.cs" />
     <None Include="Models\BookmarkModel.cs" />
+    <None Include="Views\ToDo\_ToDo.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,10 +33,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="OpenCqs" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Code\" />
   </ItemGroup>
 
 </Project>

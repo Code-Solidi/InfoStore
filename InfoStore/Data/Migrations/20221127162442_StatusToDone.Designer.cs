@@ -4,6 +4,7 @@ using InfoStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221127162442_StatusToDone")]
+    partial class StatusToDone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,12 +149,6 @@ namespace InfoStore.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("Notified")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Overdue")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Remind")
                         .HasColumnType("int");
 
@@ -168,9 +164,6 @@ namespace InfoStore.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Text")
-                        .IsUnique();
 
                     b.ToTable("ToDos", "Info");
                 });

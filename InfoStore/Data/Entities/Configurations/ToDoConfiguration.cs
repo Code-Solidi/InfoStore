@@ -13,6 +13,9 @@ namespace InfoStore.Data.Entities.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Text).IsRequired().HasMaxLength(200);
+            builder.HasIndex(x => x.Text).IsUnique();
+
+            builder.Property(x => x.EMail).HasMaxLength(200);
         }
     }
 }

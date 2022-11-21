@@ -1,12 +1,14 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
+using InfoStore.Code;
 using InfoStore.Data;
 using InfoStore.Models;
 using InfoStore.Models.Validators;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,8 @@ using Microsoft.Extensions.Hosting;
 using OpenCqs;
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace InfoStore
 {
@@ -36,11 +40,11 @@ namespace InfoStore
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddTransient<IValidator<BookmarkIndexModel>, IndexModelValidator>();
-            builder.Services.AddTransient<IValidator<BookmarkModel>, BookmarkModelValidator>();
-            builder.Services.AddTransient<IValidator<GroupModel>, GroupModelValidator>();
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
             builder.Services.AddHandlers(typeof(Program).Assembly);
+            builder.Services.AddScoped<ToDoNotifier>();
+            builder.Services.AddHostedService<TimedBackgroundService>();
 
             var app = builder.Build();
 
@@ -63,6 +67,8 @@ namespace InfoStore
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UseCultrueRewrite();
 
             app.MapControllerRoute(
                 name: "default",

@@ -25,19 +25,15 @@ namespace InfoStore.Models
             this.Filter = filter;
         }
 
+        public bool IsValid => this.getTodos != default;
+
         public string Text { get; set; }
 
         public string EMail { get; set; }   // maybe overwritten in each reminder
 
-        //public TimeUnit MinutesHoursDays { get; set; }
-
-        //public uint Before { get; set; }
-
-        //public uint Repeat { get; set; }
-
-        public ToDoModel[] GetTodos()
+        public ToDoModel[] GetToDos()
         {
-            var todosQuery = new GetToDosQuery { Group = this.Filter?.Group, Search = this.Filter?.Search };
+            var todosQuery = new GetToDosQuery { EMail = this.EMail, Group = this.Filter?.Group, Search = this.Filter?.Search };
             return this.getTodos?.Handle(todosQuery).ToArray() ?? Array.Empty<ToDoModel>();
         }
 
@@ -52,26 +48,6 @@ namespace InfoStore.Models
             public string Search { get; init; }
 
             public string Group { get; init; }
-        }
-    }
-
-    public class ToDoModel
-    {
-        public Guid Id { get; set; }
-
-        public string Text { get; set; }
-
-        public string EMail { get; set; }
-
-        public TimeUnit MinutesHoursDays { get; set; }
-
-        public uint Before { get; set; }
-
-        public uint Repeat { get; set; }
-
-        public enum TimeUnit
-        {
-            Minutes, Hours, Days
         }
     }
 }

@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <a title="Edit" class="btn btn-primary" href="/Home/Edit/@item.Id">Modify</a>
-                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-bs-bookmark-id="@item.Id">Delete</a>
+                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
                                     <a class="btn btn-secondary float-end" href="/home/groups">Groups</a>
                                 </div>
                             </div>
@@ -137,8 +137,7 @@
 </div>
 
 @section Styles {
-    <style>
-    </style>
+    <link rel="stylesheet" href="~/css/accordion-patch.css" asp-append-version="true" />
 }
 
 @section Scripts {
@@ -184,12 +183,12 @@
 
         $('#confirmDeleteleModal').on('show.bs.modal', function (e) {
             var button = e.relatedTarget;
-            var id = $(button).attr('data-bs-bookmark-id');
-            $('#btn-delete', this).attr('data-bs-bookmark-id', id);
+            var id = $(button).attr('data-item-id');
+            $('#btn-delete', this).attr('data-item-id', id);
         });
 
         $('#btn-delete').on('click', function () {
-            var id = $(this).attr('data-bs-bookmark-id');
+            var id = $(this).attr('data-item-id');
             $.post('/home/delete/' + id, function () {
                 window.location.href = '/home/index';
             });

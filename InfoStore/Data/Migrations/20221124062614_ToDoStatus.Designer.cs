@@ -4,6 +4,7 @@ using InfoStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfoStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221124062614_ToDoStatus")]
+    partial class ToDoStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,6 +114,31 @@ namespace InfoStore.Data.Migrations
                     b.ToTable("Notes", "Info");
                 });
 
+            modelBuilder.Entity("InfoStore.Data.Entities.Reminder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Before")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EMail")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("MinutesHoursDays")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Repeat")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reminders", "Info");
+                });
+
             modelBuilder.Entity("InfoStore.Data.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -137,26 +164,13 @@ namespace InfoStore.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("DueDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EMail")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<Guid?>("ReminderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Notified")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Overdue")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Remind")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Repeat")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -164,13 +178,9 @@ namespace InfoStore.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("TimeUnit")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Text")
-                        .IsUnique();
+                    b.HasIndex("ReminderId");
 
                     b.ToTable("ToDos", "Info");
                 });
@@ -399,6 +409,15 @@ namespace InfoStore.Data.Migrations
                         .HasForeignKey("GroupId");
 
                     b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("InfoStore.Data.Entities.ToDo", b =>
+                {
+                    b.HasOne("InfoStore.Data.Entities.Reminder", "Reminder")
+                        .WithMany()
+                        .HasForeignKey("ReminderId");
+
+                    b.Navigation("Reminder");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

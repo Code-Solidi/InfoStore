@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Html;
+﻿@using InfoStore.Code;
+@using Microsoft.AspNetCore.Html;
+@using System.Text;
 @model ToDoIndexModel
 
 @{
@@ -27,65 +29,64 @@
 <table class="table table-borderless table-sm">
     <thead>
         <tr>
-            <th scope="col" class="em-2">#</th>
-            <th scope="col" class="em-6 text-center">Actions</th>
+            <th scope="col" class="em-4">Actions</th>
             <th scope="col">To Do</th>
-            <th scope="col">Complete</th>
+            <th scope="col" class="em-4">Status</th>
         </tr>
     </thead>
     <tbody>
         @{
-            var todos = this.Model.GetTodos();
+            var todos = this.Model.GetToDos();
             for (var index = 0; index < todos.Count(); index++)
             {
                 var item = todos[index];
+                var isOverdue = item.DueDateTime != DateTime.MinValue && item.DueDateTime < DateTime.Now.NoSeconds() && !item.Done;
+                var overdue = isOverdue ? "text-danger" : string.Empty;
                 <tr>
-                    <td scope="row">@(index + 1).</td>
                     <td class="text-center">
                         <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
                             <i class="bi bi-arrow-clockwise"></i>
                         </a>
                     </td>
                     <td>
-                        <span class="truncate">
+                        <span class="truncate @overdue">
                             @item.Text
                         </span>
                     </td>
+                    <td>
+
+                        <div class="form-check" style="display: flex; justify-content: center">
+                            <input class="form-check-input" asp-for="@item.Done" data-item-id="@item.Id">
+                        </div>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="p-0">
+                    <td colspan="3" class="p-0">
                         <div class="collapse" id="collapse-@index">
-                            <div class="card ml-4 p-2">
-                                <form asp-action="Reminder">
-                                    <input type="hidden" data-todo-id="@item.Id" name="Id" />
-                                    <div class="card-body row">
-                                        <label class="col-2 col-form-label email" style="width: auto">Send a reminder to </label>
-                                        <input asp-for="@item.EMail" class="form-control no-wrap" />
-                                        <input asp-for="@item.Before" class="form-control no-wrap-5rem ms-1" />
-                                        <div class="dropdown no-wrap">
-                                            <button id="dropdownTimeUnit-@(index + 1)" type="button" class="btn btn-secondary dropdown-toggle ps-3" data-bs-toggle="dropdown" data-bs-todo-id="@item.Id" aria-expanded="false">
-                                                Select
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownTimeUnit-@(index + 1)">
-                                                @{
-                                                    foreach (var unit in this.GetTimeUnitNames())
-                                                    {
-                                                        <li><a class="dropdown-item" href="#">@unit</a></li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </div>
-                                        <label class="col-2 col-form-label" style="width: auto">before. Then repeat it every </label>
-                                        <input asp-for="@item.Repeat" class="form-control no-wrap-5rem ms-1" />
-                                        <label id="label-time-units-@(index + 1)" class="col-2 col-form-label" style="width: auto"></label>
+                            @if (item.DueDateTime == default)
+                            {
+                                <div class="card">
+                                    <div class="card-body mt-3">
+                                        No due date and time set.
                                     </div>
-
                                     <div class="card-footer">
-                                        <button class="btn btn-primary" type="submit">Update</button>
-                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-bs-todo-id="@item.Id">Delete</a>
+                                        <a class="btn btn-primary" href="/ToDo/Edit/@item.Id">Deadline</a>
+                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card">
+                                    <div class="card-body mt-3">
+                                        @this.DeadlineAndReminderText(item)
+                                    </div>
+                                    <div class="card-footer">
+                                        <a class="btn btn-primary" href="/ToDo/Edit/@item.Id">Modify</a>
+                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </td>
                 </tr>
@@ -114,15 +115,20 @@
 
 @section Styles {
     <style>
-        .no-wrap {
-            display: inherit;
-            width: auto;
+        .card-body {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
         }
 
-        .no-wrap-5rem {
-            display: inherit;
-            max-width: 5rem;
+        form#deadline-form .input-group {
+            align-items: center;
         }
+
+        .accordion-body {
+            padding-right: 1px;
+        }
+
     </style>
 }
 
@@ -130,37 +136,111 @@
     <script>
         $('#confirmDeleteleModal').on('show.bs.modal', function (e) {
             var button = e.relatedTarget;
-            var id = $(button).attr('data-bs-note-id');
-            $('#btn-delete', this).attr('data-bs-note-id', id);
+            var id = $(button).attr('data-item-id');
+            $('#btn-delete', this).attr('data-item-id', id);
         });
 
-        $('a.dropdown-item').on('click', function(e) {
-            e.preventDefault();
-            var units = $(this).text();
-            var parent = $(this).closest('div');
-            $('.dropdown-toggle', parent).text(units);
-            var labelTimeUnits = $(parent).parent().children().last();
-            $(labelTimeUnits).text(units);
+        $('td a').on('click', function () {
+            $('i', this).toggleClass('bi-arrow-counterclockwise');
+            $('i', this).toggleClass('bi-arrow-clockwise');
         });
 
         $('#btn-delete').on('click', function () {
-            var id = $(this).attr('data-bs-note-id');
-            $.post('/notes/delete/' + id, function () {
-                window.location.href = '/notes/index';
+            var id = $(this).attr('data-item-id');
+            $.post('/todo/delete/' + id, function () {
+                window.location.href = '/todo/index';
+            });
+        });
+
+        $('input[type="checkbox"]').on('change', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data-item-id');
+            $.post('/todo/check/' + id, { checked: this.checked }, function () {
+                window.location.href = '/todo/index';
             });
         });
     </script>
 }
 
 @functions {
-    IHtmlContent GetTimeUnit(ToDoModel.TimeUnit timeUnit, uint before)
+    IHtmlContent GetTimeUnit(TimeUnit timeUnit, uint before)
     {
-        var name = Enum.GetName(typeof(ToDoModel.TimeUnit), timeUnit).ToLower();
+        var name = Enum.GetName(typeof(TimeUnit), timeUnit).ToLower();
         return new HtmlString(before == 1 ? name : name[..(name.Length - 1)]);
     }
 
-    IEnumerable<string> GetTimeUnitNames()
+    IHtmlContent DeadlineAndReminderText(ToDoModel item)
     {
-        return Enum.GetNames(typeof(ToDoModel.TimeUnit));
+        var mhd = $"{item.TimeUnit}".ToLower();
+        var builder = new StringBuilder($"Deadline set to <strong>{item.DueDateTime}</strong>. ");
+
+        var now = DateTime.Now.NoSeconds();
+        var remind = now;
+        switch (item.TimeUnit)
+        {
+            case TimeUnit.Days:
+                remind.AddDays(-item.Remind);
+                break;
+
+            case TimeUnit.Hours:
+                remind.AddHours(-item.Remind);
+                break;
+
+            case TimeUnit.Minutes:
+                remind.AddMinutes(-item.Remind);
+                break;
+
+            default:    
+                remind.AddMinutes(-5);  // default time before deadline when no reminder set
+                break;
+        }
+
+        if (item.DueDateTime >= remind && item.DueDateTime <= now && !item.Done)
+        {
+            if (item.Remind != 0)
+            {
+                builder.Append($"A reminder will be sent to '{item.EMail}' {item.Remind} {mhd} before the deadline is reached. ");
+            }
+
+            var diff = remind - item.DueDateTime;
+            var days = diff.Days;
+            var hours = diff.Hours;
+            var minutes = diff.Minutes;
+
+            var daysText = days != 1 ? "days" : "day";
+            var hoursText = hours != 1 ? "hours" : "hour";
+            var minutesText = minutes != 1 ? "minutes" : "minute";
+
+            var overdue = string.Empty;
+            if (days != 0)
+            {
+                overdue = $"{days} {daysText}, {hours} {hoursText}, {minutes} {minutesText}";
+            }
+            else if (hours != 0)
+            {
+                overdue = $"{hours} {hoursText}, {minutes} {minutesText}";
+            }
+            else
+            {
+                overdue = $"{minutes} {minutesText}";
+            }
+
+            builder.Append($"Overdue {overdue}.");
+        }
+        
+        if (item.Done)
+        {
+            builder.Append($" Done!");
+        }
+
+        if (item.Notified != 0)
+        {
+            builder.Append($" Recipient has been notified {item.Notified} time(s).");
+        }
+
+        var text = builder.ToString();
+
+        return new HtmlString(text);
     }
+
 }

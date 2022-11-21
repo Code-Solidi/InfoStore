@@ -2,37 +2,40 @@
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
 
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace InfoStore.Data.Handlers
 {
-    public class GetToDosHandler : QueryHandlerBase<GetToDosQuery, IEnumerable<ToDoModel>>
+    public class GetToDoHandler : QueryHandlerBase<GetToDoQuery, ToDoModel>
     {
         private readonly ApplicationDbContext dbContext;
 
-        public GetToDosHandler(ApplicationDbContext dbContext)
+        public GetToDoHandler(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }
 
-        public override IEnumerable<ToDoModel> Handle(GetToDosQuery query)
+        public override ToDoModel Handle(GetToDoQuery query)
         {
-            var result = this.dbContext.Set<ToDo>().Select(x => new ToDoModel
+            var todos = this.dbContext.Set<ToDo>().AsQueryable();
+            var queryResult = todos.Where(x => x.Id == query.Id).ToArray();
+
+            var result = queryResult.Select(x => new ToDoModel
             {
                 Id = x.Id,
                 Text = x.Text,
-                Done= x.Done,
                 DueDateTime = x.DueDateTime,
                 Remind = x.Remind,
                 TimeUnit = x.TimeUnit,
-                EMail = x.EMail,
+                EMail = x.EMail ?? query.Email,   // query.Email is the default
                 Repeat = x.Repeat,
-                Notified= x.Notified
-            });
+                Notified = x.Notified
+            }).SingleOrDefault();
 
             return result;
         }

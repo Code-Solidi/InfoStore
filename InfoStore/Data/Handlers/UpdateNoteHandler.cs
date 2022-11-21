@@ -29,7 +29,7 @@ namespace InfoStore.Data.Handlers
             note.Content = command.Content;
 
             var result = this.dbContext.SaveChanges();
-            return new[] { 0, 1 }.Any(x => x == result) ? new CommandResult() : throw new DbUpdateException("Failed");
+            return new[] { 0, 1 }.All(x => x != result) ? throw new DbUpdateException("Failed") : new CommandResult();
         }
     }
 

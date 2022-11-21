@@ -1836,6 +1836,25 @@
         "icons/zoom-in.svg",
         "icons/zoom-out.svg"
       ]
+    },
+    {
+      "library": "jquery-datetimepicker@2.5.21",
+      "destination": "wwwroot/lib/jquery-datetimepicker/",
+      "files": [
+        "screen/1.png",
+        "screen/2.png",
+        "screen/3.1.png",
+        "screen/3.png",
+        "screen/4.png",
+        "screen/5.png",
+        "screen/6.png",
+        "jquery.datetimepicker.css",
+        "jquery.datetimepicker.js"
+      ]
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
     }
   ]
 }

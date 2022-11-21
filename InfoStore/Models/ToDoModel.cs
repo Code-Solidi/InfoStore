@@ -1,12 +1,12 @@
-﻿using InfoStore.Models;
+﻿using System;
 
-using System;
-
-namespace InfoStore.Data.Entities
+namespace InfoStore.Models
 {
-    public class ToDo
+    public class ToDoModel
     {
         public Guid Id { get; set; }
+
+        public int Index { get; set; }
 
         public string Text { get; set; }
 
@@ -23,7 +23,15 @@ namespace InfoStore.Data.Entities
         public ushort Repeat { get; set; }
 
         public ushort Notified { get; set; }
-
-        public bool Overdue { get; set; }
     }
+
+    public enum TimeUnit
+    {
+        None, Minutes, Hours, Days
+    }
+
+    //public enum ToDoStatus
+    //{
+    //    Indeterminate, InProgress, Complete, Pending, Overdue
+    //}
 }

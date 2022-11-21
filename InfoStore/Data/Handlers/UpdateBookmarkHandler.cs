@@ -30,7 +30,7 @@ namespace InfoStore.Data.Handlers
             bookmark.Description = command.Description;
 
             var result = this.dbContext.SaveChanges();
-            return new[] { 0, 1 }.Any(x => x == result) ? new CommandResult() : throw new DbUpdateException("Failed");
+            return new[] { 0, 1 }.All(x => x != result) ? throw new DbUpdateException("Failed") : new CommandResult();
         }
     }
 
