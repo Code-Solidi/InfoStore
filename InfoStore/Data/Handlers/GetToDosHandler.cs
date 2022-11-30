@@ -2,6 +2,8 @@
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
 
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
@@ -21,20 +23,18 @@ namespace InfoStore.Data.Handlers
 
         public override IEnumerable<ToDoModel> Handle(GetToDosQuery query)
         {
-            var result = this.dbContext.Set<ToDo>().Select(x => new ToDoModel
+            return this.dbContext.Set<ToDo>().Select(x => new ToDoModel
             {
                 Id = x.Id,
                 Text = x.Text,
-                Done= x.Done,
+                Done = x.Done,
                 DueDateTime = x.DueDateTime,
                 Remind = x.Remind,
                 TimeUnit = x.TimeUnit,
                 EMail = x.EMail,
                 Repeat = x.Repeat,
-                Notified= x.Notified
-            });
-
-            return result;
+                Notified = x.Notified
+            }).AsNoTracking();
         }
     }
 }

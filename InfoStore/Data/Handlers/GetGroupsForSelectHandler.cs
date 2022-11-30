@@ -2,6 +2,8 @@
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
 
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
@@ -22,7 +24,9 @@ namespace InfoStore.Data.Handlers
         public override IEnumerable<BookmarkIndexModel.GroupSelect> Handle(GetGroupsForSelectQuery query)
         {
             var groups = this.dbContext.Set<Group>();
-            return groups.OrderBy(x => x.Name).Select(x => new BookmarkIndexModel.GroupSelect { Id = x.Id, Name = x.Name });
+            return groups.OrderBy(x => x.Name)
+                .Select(x => new BookmarkIndexModel.GroupSelect { Id = x.Id, Name = x.Name })
+                .AsNoTracking();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace InfoStore.Data.Handlers
 
         public override IEnumerable<NoteModel> Handle(GetNotesQuery query)
         {
-            var notes = this.dbContext.Set<Note>().AsQueryable();//.Include(x => x.Group);
+            var notes = this.dbContext.Set<Note>().AsQueryable();
             var queryResult = notes.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.Group))
@@ -43,7 +43,7 @@ namespace InfoStore.Data.Handlers
                 Id = x.Id,
                 Title = x.Title,
                 Content = CommonMarkConverter.Convert(x.Content, default)
-            });
+            }).AsNoTracking();
         }
     }
 }

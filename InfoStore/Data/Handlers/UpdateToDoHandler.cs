@@ -34,9 +34,11 @@ namespace InfoStore.Data.Handlers
                 todo.Remind = command.Remind;
                 todo.TimeUnit = command.TimeUnit;
                 todo.Repeat = command.Repeat;
-                todo.Notified = todo.DueDateTime != command.DueDateTime || todo.Repeat != command.Repeat || todo.Remind != command.Remind 
-                    ? (ushort)0
-                    : todo.Notified;
+                todo.Notified = 0;
+                todo.Overdue = false;
+                //todo.Notified = todo.DueDateTime != command.DueDateTime || todo.Repeat != command.Repeat || todo.Remind != command.Remind 
+                //    ? (ushort)0
+                //    : todo.Notified;
 
                 todos.Update(todo);
                 var result = this.dbContext.SaveChanges();

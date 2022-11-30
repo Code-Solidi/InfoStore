@@ -2,6 +2,9 @@
 using InfoStore.Data.Entities;
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
+
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
@@ -25,20 +28,17 @@ namespace InfoStore.Data.Handlers
 
             var todos = this.dbContext.Set<ToDo>().Where(x => x.Remind != 0);
 
-            var inMinutes = todos/*this.dbContext.Set<ToDo>()*/.Where(x => x.TimeUnit == TimeUnit.Minutes 
-                && x.DueDateTime.AddMinutes(-x.Remind) == deadline 
-                && deadline < x.DueDateTime 
-                && x.Notified < query.NotificationTreshold);
-            
-            var inHours = this.dbContext.Set<ToDo>().Where(x => x.TimeUnit == TimeUnit.Hours 
-                && x.DueDateTime.AddHours(-x.Remind) <= deadline 
-                && deadline < x.DueDateTime
-                && x.Notified < query.NotificationTreshold);
+            var inMinutes = todos.Where(x => x.TimeUnit == TimeUnit.Minutes 
+                && x.DueDateTime.AddMinutes(-x.Remind + x.Repeat * x.Notified) == deadline 
+                && deadline < x.DueDateTime);
 
-            var inDays = this.dbContext.Set<ToDo>().Where(x => x.TimeUnit == TimeUnit.Days 
-                && x.DueDateTime.AddDays(-x.Remind) <= deadline 
-                && deadline < x.DueDateTime 
-                && x.Notified < query.NotificationTreshold);
+            var inHours = todos.Where(x => x.TimeUnit == TimeUnit.Hours
+                && x.DueDateTime.AddHours(-x.Remind + x.Repeat * x.Notified) <= deadline
+                && deadline < x.DueDateTime);
+
+            var inDays = todos.Where(x => x.TimeUnit == TimeUnit.Days 
+                && x.DueDateTime.AddDays(-x.Remind + x.Repeat * x.Notified) <= deadline 
+                && deadline < x.DueDateTime);
 
             var all = inMinutes.Union(inHours).Union(inDays);
 
@@ -53,7 +53,7 @@ namespace InfoStore.Data.Handlers
                 EMail = x.EMail,
                 Repeat = x.Repeat,
                 Notified = x.Notified
-            });
+            }).AsNoTracking();
 
             return result;
         }

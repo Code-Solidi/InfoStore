@@ -8,9 +8,9 @@ namespace InfoStore.UseCases.Queries
     {
         public GetNoteQuery(Guid id)
         {
-            this.NoteId = id != Guid.Empty ? id : throw new InvalidOperationException("Note id cannot be empty.");
+            this.Id = id != Guid.Empty ? id : throw new InvalidOperationException("Note id cannot be empty.");
         }
 
-        public Guid NoteId { get; }
+        public Guid Id { get; }
     }
 }

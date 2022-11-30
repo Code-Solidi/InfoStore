@@ -18,26 +18,52 @@ namespace InfoStore.Data.Handlers
         public GetToDoHandler(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
+            this.Add(new GetToDoExceptionHandler());
         }
 
         public override ToDoModel Handle(GetToDoQuery query)
         {
-            var todos = this.dbContext.Set<ToDo>().AsQueryable();
-            var queryResult = todos.Where(x => x.Id == query.Id).ToArray();
-
-            var result = queryResult.Select(x => new ToDoModel
+            var todo = this.dbContext.Set<ToDo>().AsNoTracking().SingleOrDefault(x => x.Id == query.Id);
+            return new ToDoModel
             {
-                Id = x.Id,
-                Text = x.Text,
-                DueDateTime = x.DueDateTime,
-                Remind = x.Remind,
-                TimeUnit = x.TimeUnit,
-                EMail = x.EMail ?? query.Email,   // query.Email is the default
-                Repeat = x.Repeat,
-                Notified = x.Notified
-            }).SingleOrDefault();
+                Id = todo.Id,
+                Text = todo.Text,
+                DueDateTime = todo.DueDateTime,
+                Remind = todo.Remind,
+                TimeUnit = todo.TimeUnit,
+                EMail = todo.EMail ?? query.Email,   // query.Email is the default
+                Repeat = todo.Repeat,
+                Notified = todo.Notified,
+                Overdue = todo.Overdue
+            };
+        }
+    }
 
-            return result;
+    [Decorator]
+    public class GetToDoExceptionHandler : QueryHandlerBase<GetToDoQuery, ToDoModel>
+    {
+        public override ToDoModel Handle(GetToDoQuery query)
+        {
+            try
+            {
+                return this.next?.Handle(query);
+            }
+            catch (DbUpdateException x)
+            {
+                return this.HandleException(x);
+            }
+        }
+
+        private ToDoModel HandleException(Exception x)
+        {
+            if (x is DbUpdateException)
+            {
+                var message = x.InnerException?.Message ?? x.Message;
+                // log message?
+                //x = new Exception(message);
+            }
+
+            return default;
         }
     }
 }

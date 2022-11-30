@@ -1,6 +1,9 @@
 ﻿using InfoStore.Data.Entities;
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
+
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
@@ -29,7 +32,7 @@ namespace InfoStore.Data.Handlers
                 Bookmarks = this.dbContext.Set<Bookmark>()
                     .Where(g => g.Group.Id == x.Id)
                     .Select(x => new BookmarkModel { Id = x.Id, Url = x.Url, Description = x.Description }).ToList()
-            });
+            }).AsNoTracking();
         }
     }
 }

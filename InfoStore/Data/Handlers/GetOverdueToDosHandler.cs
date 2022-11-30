@@ -3,6 +3,8 @@ using InfoStore.Data.Entities;
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
 
+using Microsoft.EntityFrameworkCore;
+
 using OpenCqs;
 
 using System;
@@ -23,7 +25,7 @@ namespace InfoStore.Data.Handlers
         public override IEnumerable<ToDoModel> Handle(GetOverdueToDosQuery query)
         {
             var deadline = DateTime.Now.NoSeconds();
-            var result = this.dbContext.Set<ToDo>()
+            return this.dbContext.Set<ToDo>().AsNoTracking()
                 .Where(x => x.DueDateTime != DateTime.MinValue && x.DueDateTime < deadline && !x.Done && !x.Overdue)
                 .Select(x => new ToDoModel
                 {
@@ -36,8 +38,6 @@ namespace InfoStore.Data.Handlers
                     EMail = x.EMail,
                     Repeat = x.Repeat
                 });
-
-            return result;
         }
     }
 }

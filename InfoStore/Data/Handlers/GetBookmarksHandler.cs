@@ -38,14 +38,16 @@ namespace InfoStore.Data.Handlers
                 queryResult = bookmarks.Where(x => EF.Functions.Like(x.Title, $"%{query.Search}%") || EF.Functions.Like(x.Url, $"%{query.Search}%"));
             }
 
-            return queryResult.Select(x => new BookmarkModel
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Url= x.Url,
-                Description = CommonMarkConverter.Convert(x.Description, default),
-                Group = x.Group.Name
-            });
+            return queryResult.OrderBy(x => x.Group.Name)
+                .Select(x => new BookmarkModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Url = x.Url,
+                    Description = CommonMarkConverter.Convert(x.Description, default),
+                    Group = x.Group.Name
+                })
+                .AsNoTracking();
         }
     }
 }

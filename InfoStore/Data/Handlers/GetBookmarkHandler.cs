@@ -1,6 +1,4 @@
-﻿using CommonMark;
-
-using InfoStore.Data.Entities;
+﻿using InfoStore.Data.Entities;
 using InfoStore.Models;
 using InfoStore.UseCases.Queries;
 
@@ -34,8 +32,9 @@ namespace InfoStore.Data.Handlers
                     Url = x.Url,
                     Description = x.Description,
                     Group = x.Group.Name,
-                    Groups = groups.Select(x => new GroupModel { Id = x.Id, Name= x.Name, Description = x.Description }).ToList()
+                    Groups = groups.Select(x => new GroupModel { Id = x.Id, Name = x.Name, Description = x.Description }).ToList()
                 })
+                .AsNoTracking()
                 .SingleOrDefault(x => x.Id == query.BookmarkId);
         }
     }

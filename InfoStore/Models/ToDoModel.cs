@@ -23,6 +23,8 @@ namespace InfoStore.Models
         public ushort Repeat { get; set; }
 
         public ushort Notified { get; set; }
+
+        public bool Overdue { get; set; }
     }
 
     public enum TimeUnit
