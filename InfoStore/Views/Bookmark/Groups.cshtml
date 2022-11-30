@@ -21,7 +21,7 @@
                         {
                             foreach (var item in this.Model.Groups)
                             {
-                                <li><a class="dropdown-item" href="/home/groups/@item.Id">@item.Name</a></li>
+                                <li><a class="dropdown-item" href="/bookmark/groups/@item.Id">@item.Name</a></li>
                             }
                         }
                         else
@@ -59,11 +59,11 @@
 
                 @if (this.IsUpdating(this.Model))
                 {
-                    <a class="btn btn-primary" href="/home/groups/">Clear</a>
+                    <a class="btn btn-primary" href="/bookmark/groups/">Clear</a>
                 }
 
                 <input type="submit" value="@mode" class="btn btn-primary" />
-                <a href="/" type="button" class="btn btn-secondary">Go&nbsp;Back</a>
+                <a asp-asp-controller="Bookmark" asp-action="Index" type="button" class="btn btn-secondary">Go&nbsp;Back</a>
             </div>
         </form>
     </div>
@@ -129,8 +129,8 @@
     <script>
         const easyMDE = new EasyMDE({ element: document.getElementById('id-group-editor') });
         $('#btn-delete').on('click', function () {
-            $.post('/home/deletegroup/@this.Model.Id', function () {
-                window.location.href = '/home/groups/';
+            $.post('/bookmark/deletegroup/@this.Model.Id', function () {
+                window.location.href = '/bookmark/groups/';
             });
         });
     </script>
