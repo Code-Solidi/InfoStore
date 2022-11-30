@@ -1,26 +1,17 @@
+using CoreXF.Framework;
+using CoreXF.Framework.Registry;
+
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-using InfoStore.Code;
-using InfoStore.Data;
-using InfoStore.Models;
-using InfoStore.Models.Validators;
+using Infos.Data;
 
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 using OpenCqs;
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace InfoStore
+namespace Infos
 {
     public class Program
     {
@@ -29,22 +20,22 @@ namespace InfoStore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
             builder.Services.AddHandlers(typeof(Program).Assembly);
-            builder.Services.AddScoped<ToDoNotifier>();
-            builder.Services.AddHostedService<TimedBackgroundService>();
+
+            var mvcBuilder = builder.Services.AddControllersWithViews();
+            
+            mvcBuilder.AddCoreXF(builder.Services);
 
             var app = builder.Build();
 
@@ -62,13 +53,12 @@ namespace InfoStore
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCoreXF();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            //app.UseCultrueRewrite();
 
             app.MapControllerRoute(
                 name: "default",

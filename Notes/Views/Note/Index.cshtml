@@ -1,0 +1,111 @@
+﻿@model NoteIndexModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Notes</h1>
+    <p>&mdash;&nbsp;Never loose your notes again&nbsp;&mdash;</p>
+</div>
+
+<form asp-action="Index">
+    <div class="form-group row mb-3">
+        <div class="col-11">
+            <input asp-for="Title" class="form-control" placeholder="Enter the title of the new note" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-1">
+            <div class="d-grid">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-borderless table-sm">
+    <thead>
+        <tr>
+            <th scope="col" class="em-2">#</th>
+            <th scope="col" class="em-6 text-center">Details</th>
+            <th scope="col">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var notes = this.Model.GetNotes();
+            for (var index = 0; index < notes.Count(); index++)
+            {
+                var item = notes[index];
+                <tr>
+                    <td scope="row">@(index + 1).</td>
+                    <td class="text-center">
+                        <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <span class="truncate">
+                            @item.Title
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="p-0">
+                        <div class="collapse" id="collapse-@index">
+                            <div class="card ml-4 p-2">
+                                <div class="card-body">
+                                    @Html.Raw(item.Content ?? "No content")
+                                </div>
+                                <div class="card-footer">
+                                    <a title="Edit" class="btn btn-primary" href="/Note/Edit/@item.Id">Modify</a>
+                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="confirmDeleteleModal" tabindex="-1" aria-labelledby="confirmDeleteleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <h5 class="modal-title" id="confirmDeleteleModalLabel">Please, confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this note? The operation is irevertible.
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-delete" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#confirmDeleteleModal').on('show.bs.modal', function (e) {
+            var button = e.relatedTarget;
+            var id = $(button).attr('data-item-id');
+            $('#btn-delete', this).attr('data-item-id', id);
+        });
+
+        $('td a').on('click', function () {
+            $('i', this).toggleClass('bi-arrow-counterclockwise');
+            $('i', this).toggleClass('bi-arrow-clockwise');
+        });
+
+        $('#btn-delete').on('click', function () {
+            var id = $(this).attr('data-item-id');
+            $.post('/note/delete/' + id, function () {
+                window.location.href = '/note/index';
+            });
+        });
+    </script>
+}

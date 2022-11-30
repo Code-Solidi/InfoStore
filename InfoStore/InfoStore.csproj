@@ -1,38 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId>aspnet-InfoStore-5B580AE1-E996-4FDE-BC9F-FFAECBA97263</UserSecretsId>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-Infos-aa9e1460-bb12-41fd-8ddb-f6a4ee3f1fb2</UserSecretsId>
+        <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Code\CultrueRewriteMiddleware.cs" />
-    <Compile Remove="Data\Entities\BookmarkTags.cs" />
-    <Compile Remove="Models\BookmarkModel.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CoreXF.Framework" Version="3.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11" />
+        <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="OpenCqs" Version="1.0.1" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Views\ToDo\_ToDo.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Code\CultrueRewriteMiddleware.cs" />
-    <None Include="Data\Entities\BookmarkTags.cs" />
-    <None Include="Models\BookmarkModel.cs" />
-    <None Include="Views\ToDo\_ToDo.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
-    <PackageReference Include="OpenCqs" Version="1.0.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Extensions\" />
+    </ItemGroup>
 
 </Project>
