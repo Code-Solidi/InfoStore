@@ -19,3 +19,6 @@
 /Notes/bin/Debug/net6.0
 /Notes/obj
 *.saved
+/ToDo/bin/Debug/net6.0
+/ToDo/Data/Migrations
+/ToDo/obj
