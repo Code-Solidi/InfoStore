@@ -9,6 +9,8 @@ namespace InfoStore.Data.Entities.Configurations
         {
             builder.ToTable("Notes", "Info");
 
+            builder.Property(x => x.UserId).IsRequired().HasMaxLength(450); // Id length in Identity
+
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 

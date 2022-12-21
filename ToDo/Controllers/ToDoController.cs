@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using OpenCqs;
 
@@ -13,6 +14,7 @@ using ToDos.UseCases.Queries;
 
 namespace ToDos.Controllers
 {
+    [Authorize]
     public class ToDoController : Controller
     {
         private readonly IQueryHandler<GetToDosQuery, IEnumerable<ToDoModel>> getToDos;

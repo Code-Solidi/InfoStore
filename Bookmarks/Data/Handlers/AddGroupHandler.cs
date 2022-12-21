@@ -12,9 +12,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class AddGroupHandler : CommandHandlerBase<AddGroupCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public AddGroupHandler(ApplicationDbContext dbContext)
+        public AddGroupHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new AddGroupExceptionCommandHandler());

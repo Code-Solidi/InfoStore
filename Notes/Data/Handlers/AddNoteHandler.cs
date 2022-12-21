@@ -11,9 +11,9 @@ namespace Notes.Data.Handlers
 {
     public class AddNoteHandler : CommandHandlerBase<AddNoteCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly NotesDbContext dbContext;
 
-        public AddNoteHandler(ApplicationDbContext dbContext)
+        public AddNoteHandler(NotesDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new AddNoteExceptionCommandHandler());

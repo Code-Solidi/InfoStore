@@ -27,12 +27,9 @@ namespace ToDos
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ToDoDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services
-                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             builder.Services.AddFluentValidationAutoValidation();
@@ -67,8 +64,7 @@ namespace ToDos
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=ToDo}/{action=Index}/{id?}");
-            app.MapRazorPages();
-
+ 
             app.Run();
         }
     }

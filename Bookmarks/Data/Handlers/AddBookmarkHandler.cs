@@ -12,9 +12,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class AddBookmarkHandler : CommandHandlerBase<AddBookmarkCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public AddBookmarkHandler(ApplicationDbContext dbContext)
+        public AddBookmarkHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new AddBookmarkExceptionCommandHandler());

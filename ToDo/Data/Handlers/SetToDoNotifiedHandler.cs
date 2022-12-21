@@ -12,9 +12,9 @@ namespace ToDos.Data.Handlers
 {
     public class SetToDoNotifiedHandler : CommandHandlerBase<SetToDoNotifiedCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public SetToDoNotifiedHandler(ApplicationDbContext dbContext)
+        public SetToDoNotifiedHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new SetToDoNotifiedExceptionCommandHandler());

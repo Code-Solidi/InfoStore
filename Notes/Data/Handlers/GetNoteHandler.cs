@@ -13,9 +13,9 @@ namespace Notes.Data.Handlers
 {
     public class GetNoteHandler : QueryHandlerBase<GetNoteQuery, NoteModel>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly NotesDbContext dbContext;
 
-        public GetNoteHandler(ApplicationDbContext dbContext)
+        public GetNoteHandler(NotesDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new GetNoteExceptionHandler());

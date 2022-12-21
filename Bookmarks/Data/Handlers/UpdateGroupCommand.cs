@@ -13,9 +13,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class UpdateGroupHandler : CommandHandlerBase<UpdateGroupCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public UpdateGroupHandler(ApplicationDbContext dbContext)
+        public UpdateGroupHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             Add(new UpdateGroupExceptionCommandHandler());

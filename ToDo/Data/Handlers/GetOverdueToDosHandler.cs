@@ -15,9 +15,9 @@ namespace ToDos.Data.Handlers
 {
     public class GetOverdueToDosHandler : QueryHandlerBase<GetOverdueToDosQuery, IEnumerable<ToDoModel>>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public GetOverdueToDosHandler(ApplicationDbContext dbContext)
+        public GetOverdueToDosHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }

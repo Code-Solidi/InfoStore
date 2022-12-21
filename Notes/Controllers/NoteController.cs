@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using Notes.Data.Handlers;
 using Notes.Models;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Notes.Controllers
 {
+    [Authorize]
     public class NoteController : Controller
     {
         private readonly IQueryHandler<GetNotesQuery, IEnumerable<NoteModel>> getNotes;

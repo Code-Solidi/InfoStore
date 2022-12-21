@@ -15,9 +15,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class GetGroupsForSelectHandler : QueryHandlerBase<GetGroupsForSelectQuery, IEnumerable<BookmarkIndexModel.GroupSelect>>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public GetGroupsForSelectHandler(ApplicationDbContext dbContext)
+        public GetGroupsForSelectHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }

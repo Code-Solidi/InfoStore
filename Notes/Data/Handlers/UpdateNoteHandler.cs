@@ -12,9 +12,9 @@ namespace Notes.Data.Handlers
 {
     public class UpdateNoteHandler : CommandHandlerBase<UpdateNoteCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly NotesDbContext dbContext;
 
-        public UpdateNoteHandler(ApplicationDbContext dbContext)
+        public UpdateNoteHandler(NotesDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new UpdateNoteExceptionCommandHandler());

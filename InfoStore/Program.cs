@@ -4,14 +4,14 @@ using CoreXF.Framework.Registry;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-using Infos.Data;
+using InfoStore.Data;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using OpenCqs;
 
-namespace Infos
+namespace InfoStore
 {
     public class Program
     {
@@ -34,7 +34,7 @@ namespace Infos
             builder.Services.AddHandlers(typeof(Program).Assembly);
 
             var mvcBuilder = builder.Services.AddControllersWithViews();
-            
+
             mvcBuilder.AddCoreXF(builder.Services);
 
             var app = builder.Build();

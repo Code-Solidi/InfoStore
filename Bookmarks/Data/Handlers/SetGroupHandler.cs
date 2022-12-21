@@ -11,9 +11,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class SetGroupHandler : CommandHandlerBase<SetGroupCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public SetGroupHandler(ApplicationDbContext dbContext)
+        public SetGroupHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }

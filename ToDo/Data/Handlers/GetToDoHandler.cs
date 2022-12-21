@@ -13,9 +13,9 @@ namespace ToDos.Data.Handlers
 {
     public class GetToDoHandler : QueryHandlerBase<GetToDoQuery, ToDoModel>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public GetToDoHandler(ApplicationDbContext dbContext)
+        public GetToDoHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new GetToDoExceptionHandler());

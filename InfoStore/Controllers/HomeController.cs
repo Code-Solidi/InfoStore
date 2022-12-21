@@ -1,10 +1,10 @@
-﻿using Infos.Models;
+﻿using InfoStore.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
 
-namespace Infos.Controllers
+namespace InfoStore.Controllers
 {
     public class HomeController : Controller
     {

@@ -12,9 +12,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class DeleteGroupHandler : CommandHandlerBase<DeleteGroupCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public DeleteGroupHandler(ApplicationDbContext dbContext)
+        public DeleteGroupHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new DeleteGroupExceptionCommandHandler());

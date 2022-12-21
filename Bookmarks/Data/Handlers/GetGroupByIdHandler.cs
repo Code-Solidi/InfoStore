@@ -13,9 +13,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class GetGroupByIdHandler : QueryHandlerBase<GetGroupByIdQuery, GroupModel>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public GetGroupByIdHandler(ApplicationDbContext dbContext)
+        public GetGroupByIdHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new GetGroupExceptionHandler());

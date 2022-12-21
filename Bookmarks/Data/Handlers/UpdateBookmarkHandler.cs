@@ -12,9 +12,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class UpdateBookmarkHandler : CommandHandlerBase<UpdateBookmarkCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public UpdateBookmarkHandler(ApplicationDbContext dbContext)
+        public UpdateBookmarkHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new UpdateBookmarkExceptionCommandHandler());

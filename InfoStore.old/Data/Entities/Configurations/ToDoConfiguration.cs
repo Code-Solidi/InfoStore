@@ -12,6 +12,9 @@ namespace InfoStore.Data.Entities.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+
+            builder.Property(x => x.UserId).IsRequired().HasMaxLength(450); // Id length in Identity
+
             builder.Property(x => x.Text).IsRequired().HasMaxLength(200);
             builder.HasIndex(x => x.Text).IsUnique();
 

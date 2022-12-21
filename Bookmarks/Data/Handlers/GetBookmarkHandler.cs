@@ -14,9 +14,9 @@ namespace Bookmarks.Data.Handlers
 {
     public class GetBookmarkHandler : QueryHandlerBase<GetBookmarkQuery, BookmarkModel>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly BookmarksDbContext dbContext;
 
-        public GetBookmarkHandler(ApplicationDbContext dbContext)
+        public GetBookmarkHandler(BookmarksDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }

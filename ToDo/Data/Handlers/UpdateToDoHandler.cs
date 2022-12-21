@@ -13,9 +13,9 @@ namespace ToDos.Data.Handlers
 {
     public class UpdateToDoHandler : CommandHandlerBase<UpdateToDoCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public UpdateToDoHandler(ApplicationDbContext dbContext)
+        public UpdateToDoHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new UpdateToDoExceptionCommandHandler());

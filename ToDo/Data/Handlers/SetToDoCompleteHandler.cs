@@ -12,9 +12,9 @@ namespace ToDos.Data.Handlers
 {
     public class SetToDoCompleteHandler : CommandHandlerBase<SetToDoCheckedComplete, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public SetToDoCompleteHandler(ApplicationDbContext dbContext)
+        public SetToDoCompleteHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new SetToDoCompleteExceptionCommandHandler());

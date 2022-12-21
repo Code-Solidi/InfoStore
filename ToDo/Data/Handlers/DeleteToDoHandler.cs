@@ -11,9 +11,9 @@ namespace ToDos.Data.Handlers
 {
     public class DeleteToDoHandler : CommandHandlerBase<DeleteToDoCommand, CommandResult>
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ToDoDbContext dbContext;
 
-        public DeleteToDoHandler(ApplicationDbContext dbContext)
+        public DeleteToDoHandler(ToDoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
             this.Add(new DeleteToDoExceptionCommandHandler());

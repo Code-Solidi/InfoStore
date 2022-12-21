@@ -12,6 +12,8 @@ namespace Notes.Data.Entities.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+            builder.Property(x => x.UserId).IsRequired().HasMaxLength(450); // Id length in Identity
+
             builder.Property(x => x.Title).IsRequired().HasMaxLength(80);
             builder.HasIndex(x => x.Title).IsUnique();
         }
