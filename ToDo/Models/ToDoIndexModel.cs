@@ -3,22 +3,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 using ToDos.UseCases.Queries;
 
 namespace ToDos.Models
 {
-    public class ToDoIndexModel
+    public class ToDoListModel
     {
         private IQueryHandler<GetToDosQuery, IEnumerable<ToDoModel>> getTodos;
 
         public ToDoFilter Filter { get; init; }
 
-        public ToDoIndexModel()
+        public ToDoListModel()
         {
         }
 
-        public ToDoIndexModel(IQueryHandler<GetToDosQuery, IEnumerable<ToDoModel>> getTodos, string email, ToDoFilter filter = default)
+        public ToDoListModel(IQueryHandler<GetToDosQuery, IEnumerable<ToDoModel>> getTodos, string email, ToDoFilter filter = default)
         {
             this.getTodos = getTodos;
             this.EMail = email;
@@ -31,9 +32,9 @@ namespace ToDos.Models
 
         public string EMail { get; set; }   // maybe overwritten in each reminder
 
-        public ToDoModel[] GetToDos()
+        public ToDoModel[] GetToDos(string userId)
         {
-            var todosQuery = new GetToDosQuery { EMail = this.EMail, Group = this.Filter?.Group, Search = this.Filter?.Search };
+            var todosQuery = new GetToDosQuery(userId);// { EMail = this.EMail, Group = this.Filter?.Group, Search = this.Filter?.Search };
             return this.getTodos?.Handle(todosQuery).ToArray() ?? Array.Empty<ToDoModel>();
         }
 

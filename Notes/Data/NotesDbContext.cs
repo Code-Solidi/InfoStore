@@ -24,6 +24,16 @@ namespace Notes.Data
             builder.Entity<Note>().HasQueryFilter(x => x.UserId == this.UserId);
         }
 
-        private string UserId => this.httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string UserId
+        {
+            get
+            {
+                var user = this.httpContextAccessor != default
+                    ? this.httpContextAccessor.HttpContext?.User
+                    : default;
+
+                return user?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            }
+        }
     }
 }

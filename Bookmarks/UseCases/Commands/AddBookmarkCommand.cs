@@ -6,20 +6,26 @@ namespace Bookmarks.UseCases.Commands
 {
     public class AddBookmarkCommand : ICommand
     {
-        public AddBookmarkCommand(string title, string url, string description, Guid groupId)
+        public AddBookmarkCommand(string title, string url, string description, Guid groupId, string userId)
         {
-            this.Title = title;
-
             if (string.IsNullOrEmpty(url))
             {
                 throw new ArgumentException($"{nameof(url)} is null or empty.", nameof(url));
             }
 
-            this.Url = url;
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException($"{nameof(userId)} is null or empty.", nameof(userId));
+            }
 
+            this.UserId = userId;
+            this.Title = title;
+            this.Url = url;
             this.Description = description;
             this.GroupId = groupId;
         }
+
+        public string UserId { get; init; }
 
         public string Title { get; init; }
 

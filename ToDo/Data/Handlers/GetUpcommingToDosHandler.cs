@@ -40,9 +40,9 @@ namespace ToDos.Data.Handlers
                 && x.DueDateTime.AddDays(-x.Remind + x.Repeat * x.Notified) <= deadline
                 && deadline < x.DueDateTime);
 
-            var all = inMinutes.Union(inHours).Union(inDays);
+            var upcomming = inMinutes.Union(inHours).Union(inDays);
 
-            var result = all.Select(x => new ToDoModel
+            var result = upcomming.Select(x => new ToDoModel
             {
                 Id = x.Id,
                 Text = x.Text,

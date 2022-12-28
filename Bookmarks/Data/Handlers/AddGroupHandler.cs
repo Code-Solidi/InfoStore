@@ -23,7 +23,7 @@ namespace Bookmarks.Data.Handlers
         public override CommandResult Handle(AddGroupCommand command)
         {
             var set = this.dbContext.Set<Group>();
-            set.Add(new Group { Name = command.Name, Description = command.Description });
+            set.Add(new Group { Name = command.Name, Description = command.Description, UserId = command.UserId });
             var result = this.dbContext.SaveChanges();
             if (result != 1)
             {

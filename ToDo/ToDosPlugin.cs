@@ -33,7 +33,7 @@ namespace ToDos
             services.AddDbContext<ToDoDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+            services.AddValidatorsFromAssembly(typeof(ToDosPlugin).Assembly);
             services.AddHandlers(typeof(ToDosPlugin).Assembly);
             services.AddScoped<ToDoNotifier>();
             services.AddHostedService<TimedBackgroundService>();

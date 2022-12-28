@@ -20,7 +20,8 @@ namespace InfoStore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -33,7 +34,7 @@ namespace InfoStore
 
             builder.Services.AddHandlers(typeof(Program).Assembly);
 
-            var mvcBuilder = builder.Services.AddControllersWithViews();
+            var mvcBuilder = builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation(); -- do not use with extensions, tries to find view srcs!
 
             mvcBuilder.AddCoreXF(builder.Services);
 

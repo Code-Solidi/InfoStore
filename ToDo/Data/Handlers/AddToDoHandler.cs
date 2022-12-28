@@ -24,7 +24,7 @@ namespace ToDos.Data.Handlers
         {
             var todos = this.dbContext.Set<ToDo>();
 
-            todos.Add(new ToDo { Text = command.Text });
+            todos.Add(new ToDo { Text = command.Text, UserId = command.UserId, EMail = command.Email });
             var result = this.dbContext.SaveChanges();
 
             return result != 1 ? throw new DbUpdateException("Failed") : new CommandResult();

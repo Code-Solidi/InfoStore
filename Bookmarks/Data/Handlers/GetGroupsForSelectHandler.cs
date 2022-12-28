@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Bookmarks.Data.Handlers
 {
-    public class GetGroupsForSelectHandler : QueryHandlerBase<GetGroupsForSelectQuery, IEnumerable<BookmarkIndexModel.GroupSelect>>
+    public class GetGroupsForSelectHandler : QueryHandlerBase<GetGroupsForSelectQuery, IEnumerable<BookmarkListModel.GroupSelect>>
     {
         private readonly BookmarksDbContext dbContext;
 
@@ -22,11 +22,11 @@ namespace Bookmarks.Data.Handlers
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} is null.");
         }
 
-        public override IEnumerable<BookmarkIndexModel.GroupSelect> Handle(GetGroupsForSelectQuery query)
+        public override IEnumerable<BookmarkListModel.GroupSelect> Handle(GetGroupsForSelectQuery query)
         {
             var groups = this.dbContext.Set<Group>();
             return groups.OrderBy(x => x.Name)
-                .Select(x => new BookmarkIndexModel.GroupSelect { Id = x.Id, Name = x.Name })
+                .Select(x => new BookmarkListModel.GroupSelect { Id = x.Id, Name = x.Name })
                 .AsNoTracking();
         }
     }

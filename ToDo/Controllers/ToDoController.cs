@@ -5,6 +5,7 @@ using OpenCqs;
 
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 using ToDos.Code;
 using ToDos.Data.Handlers;
@@ -19,7 +20,7 @@ namespace ToDos.Controllers
     {
         private readonly IQueryHandler<GetToDosQuery, IEnumerable<ToDoModel>> getToDos;
         private readonly ICommandHandler<AddToDoCommand, CommandResult> addToDo;
-        private const string Email = "achristov@hotmail.com";
+        //private const string Email = "achristov@hotmail.com";
         readonly IQueryHandler<GetToDoQuery, ToDoModel> getToDo;
         readonly ICommandHandler<UpdateToDoCommand, CommandResult> updateToDo;
         readonly ICommandHandler<SetToDoCheckedComplete, CommandResult> setToDoChecked;
@@ -45,28 +46,32 @@ namespace ToDos.Controllers
 
         public IActionResult Index()
         {
-            var model = new ToDoIndexModel(this.getToDos, Email);
+            var email = this.User?.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+            var model = new ToDoListModel(this.getToDos, email);
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Index(ToDoIndexModel model)
+        public IActionResult Index(ToDoListModel model)
         {
+            var email = this.User?.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
             if (this.ModelState.IsValid)
             {
-                var result = this.addToDo.Handle(new AddToDoCommand(model.Text));
+                var userId = this.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+                var result = this.addToDo.Handle(new AddToDoCommand(model.Text, userId, email));
                 if (result.IsSuccess)
                 {
                     return this.RedirectToAction(nameof(Index));
                 }
             }
 
-            return this.View(new ToDoIndexModel(this.getToDos, Email));
+            return this.View(new ToDoListModel(this.getToDos, email));
         }
 
         public IActionResult Edit(Guid id)
         {
-            var model = this.getToDo.Handle(new GetToDoQuery(id, Email));
+            var email = this.User?.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+            var model = this.getToDo.Handle(new GetToDoQuery(id, email));
             return this.View(model);
         }
 

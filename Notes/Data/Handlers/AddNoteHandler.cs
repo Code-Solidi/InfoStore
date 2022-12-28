@@ -23,7 +23,7 @@ namespace Notes.Data.Handlers
         {
             var notes = this.dbContext.Set<Note>();
 
-            notes.Add(new Note { Title = command.Title, Content = command.Content });
+            notes.Add(new Note { Title = command.Title, Content = command.Content, UserId = command.UserId });
             var result = this.dbContext.SaveChanges();
 
             return result != 1 ? throw new DbUpdateException("Failed") : new CommandResult();

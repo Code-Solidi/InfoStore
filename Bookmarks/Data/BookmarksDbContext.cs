@@ -11,7 +11,7 @@ namespace Bookmarks.Data
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public BookmarksDbContext(DbContextOptions<BookmarksDbContext> options, IHttpContextAccessor httpContextAccessor = null) 
+        public BookmarksDbContext(DbContextOptions<BookmarksDbContext> options, IHttpContextAccessor httpContextAccessor = null)
             : base(options)
         {
             this.httpContextAccessor = httpContextAccessor;
@@ -22,8 +22,19 @@ namespace Bookmarks.Data
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(BookmarksDbContext).Assembly);
             builder.Entity<Bookmark>().HasQueryFilter(x => x.UserId == this.UserId);
+            builder.Entity<Group>().HasQueryFilter(x => x.UserId == this.UserId);
         }
 
-        private string UserId => this.httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string UserId
+        {
+            get
+            {
+                var user = this.httpContextAccessor != default
+                    ? this.httpContextAccessor.HttpContext?.User
+                    : default;
+
+                return user?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            }
+        }
     }
 }

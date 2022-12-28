@@ -10,6 +10,7 @@ using OpenCqs;
 
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Notes.Controllers
 {
@@ -37,23 +38,24 @@ namespace Notes.Controllers
 
         public IActionResult Index()
         {
-            var model = new NoteIndexModel(this.getNotes);
+            var model = new NoteListModel(this.getNotes);
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Index(NoteIndexModel model)
+        public IActionResult Index(NoteListModel model)
         {
             if (this.ModelState.IsValid)
             {
-                var result = this.addNote.Handle(new AddNoteCommand(model.Title, model.Content));
+                var userId = this.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+                var result = this.addNote.Handle(new AddNoteCommand(model.Title, model.Content, userId));
                 if (result.IsSuccess)
                 {
                     return this.RedirectToAction(nameof(Index));
                 }
             }
 
-            return this.View(new NoteIndexModel(this.getNotes));
+            return this.View(new NoteListModel(this.getNotes));
         }
 
         public IActionResult Edit(Guid id)

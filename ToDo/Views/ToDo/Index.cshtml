@@ -1,7 +1,8 @@
-﻿@using ToDos.Code;
+﻿@using System.Security.Claims;
+@using ToDos.Code;
 @using Microsoft.AspNetCore.Html;
 @using System.Text;
-@model ToDoIndexModel
+@model ToDoListModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -36,7 +37,8 @@
     </thead>
     <tbody>
         @{
-            var todos = this.Model.GetToDos();
+            var userId = this.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var todos = this.Model.GetToDos(userId);
             for (var index = 0; index < todos.Count(); index++)
             {
                 var item = todos[index];

@@ -1,9 +1,15 @@
 ﻿using Microsoft.Extensions.Hosting;
 
+using NuGet.Protocol.Plugins;
+
 using OpenCqs;
 
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,10 +51,6 @@ namespace ToDos.Code
             {
                 while (!stoppingToken.IsCancellationRequested && await timer.WaitForNextTickAsync(stoppingToken))
                 {
-                    // Alternative to PeriodicTimer (available in .NET Core 2.1).
-                    // REMARK: Calls would successively be delayed a little bit this way.
-                    //await Task.Delay(interval, stoppingToken);
-
                     await ExecuteTaskAsync();
                 }
             }
@@ -72,7 +74,6 @@ namespace ToDos.Code
 
             await Task.CompletedTask;
         }
-
         private void SendMessage(ToDoModel item, MessageType messageType)
         {
             switch (messageType)
@@ -86,7 +87,38 @@ namespace ToDos.Code
                     break;
             }
 
-            Console.WriteLine($"[{DateTime.Now.NoSeconds()}]: Sending {messageType} message to '{item.Text}' due {item.DueDateTime} with reminder {item.Remind} {item.TimeUnit} ({item.Repeat}).");
+            this.SendEmailAsync(messageType, item).GetAwaiter().GetResult();
+        }
+
+
+        async Task SendEmailAsync(MessageType type, ToDoModel item)
+        {
+            var message = new MailMessage { From = new MailAddress("office@codesolidi.com") };
+            var subject = Enum.GetName(typeof(MessageType), type);
+
+            message.Subject = $"ToDo {subject}";
+            message.IsBodyHtml = false;
+            message.Body = $"{item.Text}";
+            message.SubjectEncoding = Encoding.UTF8;
+            message.BodyEncoding = Encoding.UTF8;
+            message.To.Add(item.EMail);
+
+            using (var client = new SmtpClient())
+            {
+#if DEBUG
+                client.EnableSsl = false;
+                client.Host = "127.0.0.1";
+                client.Port = 25;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+#else
+                client.EnableSsl = true;
+                client.Host = "codesolidi.com";
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Credentials = new NetworkCredential("office@codesolidi.com", "d261f332");
+#endif
+                await client.SendMailAsync(message);
+            }
         }
     }
 }

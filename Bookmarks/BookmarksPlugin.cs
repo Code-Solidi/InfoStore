@@ -32,7 +32,7 @@ namespace Bookmarks
             services.AddDbContext<BookmarksDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+            services.AddValidatorsFromAssembly(typeof(BookmarksPlugin).Assembly);
             services.AddHandlers(typeof(BookmarksPlugin).Assembly);
         }
     }

@@ -23,9 +23,10 @@ namespace ToDos.Data.Handlers
 
         public override IEnumerable<ToDoModel> Handle(GetToDosQuery query)
         {
-            return this.dbContext.Set<ToDo>().Select(x => new ToDoModel
+            return this.dbContext.Set<ToDo>().Where(x => x.UserId == query.UserId).Select(x => new ToDoModel
             {
                 Id = x.Id,
+                UserId = x.UserId,
                 Text = x.Text,
                 Done = x.Done,
                 DueDateTime = x.DueDateTime,

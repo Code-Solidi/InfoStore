@@ -4,7 +4,7 @@
 @using System.IO
 @using System.Text.Encodings.Web
 
-@model BookmarkIndexModel
+@model BookmarkListModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -34,7 +34,7 @@
     <div class="form-group row mb-3">
         <div class="col-11">
             <input asp-for="Url" class="form-control" placeholder="Enter the URL to bookmark" />
-            <div class="form-text text-danger">@this.GetString(Html.ValidationMessageFor(x => x.Url))</div>
+            <div class="text-danger">@this.GetString(Html.ValidationMessageFor(x => x.Url))</div>
         </div>
         <div class="col-1">
             <div class="d-grid">
@@ -76,7 +76,7 @@
                                 </div>
                                 <ul class="dropdown-menu" id="accordion-add-to-group" aria-labelledby="@buttonId">
                                     @{
-                                        var groups = this.Model?.GetGroups() ?? Array.Empty<BookmarkIndexModel.GroupSelect>();
+                                        var groups = this.Model?.GetGroups() ?? Array.Empty<BookmarkListModel.GroupSelect>();
                                         foreach (var group in groups)
                                         {
                                             <li><a class="dropdown-item" href="#" data-group-id="@group.Id">@group.Name</a></li>

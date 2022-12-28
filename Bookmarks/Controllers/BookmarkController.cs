@@ -14,6 +14,7 @@ using OpenCqs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Bookmarks.Controllers
 {
@@ -22,7 +23,7 @@ namespace Bookmarks.Controllers
     {
         private readonly ILogger<BookmarkController> logger;
         readonly ICommandHandler<AddBookmarkCommand, CommandResult> addBookmark;
-        readonly IQueryHandler<GetGroupsForSelectQuery, IEnumerable<BookmarkIndexModel.GroupSelect>> getGroupsForSelect;
+        readonly IQueryHandler<GetGroupsForSelectQuery, IEnumerable<BookmarkListModel.GroupSelect>> getGroupsForSelect;
         readonly ICommandHandler<AddGroupCommand, CommandResult> addGroup;
         readonly IQueryHandler<GetGroupsQuery, IEnumerable<GroupModel>> getGroups;
         readonly IQueryHandler<GetGroupByIdQuery, GroupModel> getGroupById;
@@ -35,7 +36,7 @@ namespace Bookmarks.Controllers
         readonly ICommandHandler<DeleteBookmarkCommand, CommandResult> deleteBookmark;
 
         public BookmarkController(ILogger<BookmarkController> logger
-            , IQueryHandler<GetGroupsForSelectQuery, IEnumerable<BookmarkIndexModel.GroupSelect>> getGroupsForSelect
+            , IQueryHandler<GetGroupsForSelectQuery, IEnumerable<BookmarkListModel.GroupSelect>> getGroupsForSelect
             , IQueryHandler<GetGroupsQuery, IEnumerable<GroupModel>> getGroups
             , IQueryHandler<GetGroupByIdQuery, GroupModel> getGroupById
             , IQueryHandler<GetBookmarksQuery, IEnumerable<BookmarkModel>> getBookmarks
@@ -65,17 +66,18 @@ namespace Bookmarks.Controllers
 
         public IActionResult Index(string group, string search)
         {
-            var filter = new BookmarkIndexModel.BookmarkFilter(group, search);
+            var filter = new BookmarkListModel.BookmarkFilter(group, search);
             this.TempData["Title"] = "Bookmarks";
-            return this.View(new BookmarkIndexModel(this.getBookmarks, this.getGroupsForSelect, filter));
+            return this.View(new BookmarkListModel(this.getBookmarks, this.getGroupsForSelect, filter));
         }
 
         [HttpPost]
-        public IActionResult Index(BookmarkIndexModel model)
+        public IActionResult Index(BookmarkListModel model)
         {
             if (this.ModelState.IsValid)
             {
-                var result = this.addBookmark.Handle(new AddBookmarkCommand(model.Title, model.Url, model.Description, model.GroupId));
+                var userId = this.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+                var result = this.addBookmark.Handle(new AddBookmarkCommand(model.Title, model.Url, model.Description, model.GroupId, userId));
                 if (result.IsSuccess)
                 {
                     return this.RedirectToAction(nameof(Index));
@@ -84,7 +86,7 @@ namespace Bookmarks.Controllers
                 this.ModelState.AddModelError(nameof(model.Url), result.Exception.Message);
             }
 
-            return this.View(new BookmarkIndexModel(this.getBookmarks, this.getGroupsForSelect));
+            return this.View(new BookmarkListModel(this.getBookmarks, this.getGroupsForSelect));
         }
 
         public IActionResult Edit(Guid id)
@@ -144,7 +146,8 @@ namespace Bookmarks.Controllers
                 }
                 else
                 {
-                    var result = this.addGroup.Handle(new AddGroupCommand(model.Name, model.Description));
+                    var userId = this.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+                    var result = this.addGroup.Handle(new AddGroupCommand(model.Name, model.Description, userId));
                     if (result.IsSuccess)
                     {
                         model = new GroupModel { Groups = groups };

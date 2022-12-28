@@ -32,7 +32,7 @@ namespace Notes
             services.AddDbContext<NotesDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+            services.AddValidatorsFromAssembly(typeof(NotesPlugin).Assembly);
             services.AddHandlers(typeof(NotesPlugin).Assembly);
         }
     }

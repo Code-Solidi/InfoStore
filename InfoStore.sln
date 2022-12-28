@@ -5,13 +5,11 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookmarks", "Bookmarks\Bookmarks.csproj", "{C29C613A-91D5-4073-9166-FA0C358092C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoStore.old", "InfoStore.old\InfoStore.old.csproj", "{1DC59A21-2A0A-421F-AAA4-0B8A180F49DB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoStore", "InfoStore\InfoStore.csproj", "{3E04EBEC-B173-4059-9D6B-7F615A88CDB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notes", "Notes\Notes.csproj", "{BADFFF29-7869-47D1-9533-E83F0C1355B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes", "Notes\Notes.csproj", "{BADFFF29-7869-47D1-9533-E83F0C1355B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDos", "ToDo\ToDos.csproj", "{46D1B729-F660-4B00-8F00-45D593FC4D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDos", "ToDo\ToDos.csproj", "{46D1B729-F660-4B00-8F00-45D593FC4D21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{C29C613A-91D5-4073-9166-FA0C358092C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C29C613A-91D5-4073-9166-FA0C358092C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C29C613A-91D5-4073-9166-FA0C358092C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DC59A21-2A0A-421F-AAA4-0B8A180F49DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DC59A21-2A0A-421F-AAA4-0B8A180F49DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DC59A21-2A0A-421F-AAA4-0B8A180F49DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DC59A21-2A0A-421F-AAA4-0B8A180F49DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E04EBEC-B173-4059-9D6B-7F615A88CDB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E04EBEC-B173-4059-9D6B-7F615A88CDB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E04EBEC-B173-4059-9D6B-7F615A88CDB4}.Release|Any CPU.ActiveCfg = Release|Any CPU

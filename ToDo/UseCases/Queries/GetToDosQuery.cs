@@ -1,13 +1,26 @@
 ﻿using OpenCqs;
 
+using System;
+
 namespace ToDos.UseCases.Queries
 {
     public class GetToDosQuery : IQuery
     {
-        public string EMail { get; set; }
+        public GetToDosQuery(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException($"{nameof(userId)} is null or empty.", nameof(userId));
+            }
 
-        public string Group { get; set; }
+            this.UserId = userId;
+        }
 
-        public string Search { get; set; }
+        //public string EMail { get; set; }
+
+        //public string Group { get; set; }
+
+        //public string Search { get; set; }
+        public string UserId { get; init; }
     }
 }

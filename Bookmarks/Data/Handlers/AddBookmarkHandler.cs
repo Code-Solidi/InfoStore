@@ -25,7 +25,7 @@ namespace Bookmarks.Data.Handlers
             var group = this.dbContext.Set<Group>().Find(command.GroupId);
             var bookmarks = this.dbContext.Set<Bookmark>();
 
-            bookmarks.Add(new Bookmark { Url = command.Url, Description = command.Description, Group = group });
+            bookmarks.Add(new Bookmark { Url = command.Url, Description = command.Description, Group = group, UserId = command.UserId });
             var result = this.dbContext.SaveChanges();
             return result != 1 ? throw new DbUpdateException("Failed") : new CommandResult();
         }
