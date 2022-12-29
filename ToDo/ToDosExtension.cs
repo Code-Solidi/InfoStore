@@ -1,6 +1,4 @@
-﻿using Bookmarks.Data;
-
-using CoreXF.Abstractions;
+﻿using CoreXF.Abstractions;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -13,13 +11,18 @@ using OpenCqs;
 
 using System;
 
-namespace Bookmarks
+using ToDos.Code;
+using ToDos.Data;
+
+namespace ToDos
 {
-    public class BookmarksPlugin : MvcExtension
+    public class ToDosExtension : MvcExtension
     {
-        public BookmarksPlugin()
+        public ToDosExtension()
         {
-            this.Name = nameof(BookmarksPlugin).Replace("Plugin", string.Empty);
+            this.Name = nameof(ToDosExtension).Replace("Extension", string.Empty);
+            this.Set("Title", this.Name);
+            this.Set("Link", "ToDo/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -29,11 +32,13 @@ namespace Bookmarks
             var connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            services.AddDbContext<BookmarksDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ToDoDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssembly(typeof(BookmarksPlugin).Assembly);
-            services.AddHandlers(typeof(BookmarksPlugin).Assembly);
+            services.AddValidatorsFromAssembly(typeof(ToDosExtension).Assembly);
+            services.AddHandlers(typeof(ToDosExtension).Assembly);
+            services.AddScoped<ToDoNotifier>();
+            services.AddHostedService<TimedBackgroundService>();
         }
     }
 }

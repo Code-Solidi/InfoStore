@@ -15,11 +15,13 @@ using System;
 
 namespace Notes
 {
-    public class NotesPlugin : MvcExtension
+    public class NotesExtension : MvcExtension
     {
-        public NotesPlugin()
+        public NotesExtension()
         {
-            this.Name = nameof(NotesPlugin).Replace("Plugin", string.Empty);
+            this.Name = nameof(NotesExtension).Replace("Extension", string.Empty);
+            this.Set("Title", this.Name);
+            this.Set("Link", "Note/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -32,8 +34,8 @@ namespace Notes
             services.AddDbContext<NotesDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssembly(typeof(NotesPlugin).Assembly);
-            services.AddHandlers(typeof(NotesPlugin).Assembly);
+            services.AddValidatorsFromAssembly(typeof(NotesExtension).Assembly);
+            services.AddHandlers(typeof(NotesExtension).Assembly);
         }
     }
 }
