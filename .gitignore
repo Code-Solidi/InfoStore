@@ -22,3 +22,7 @@
 /ToDo/bin/Debug/net6.0
 /ToDo/Data/Migrations
 /ToDo/obj
+/Bookshelf/bin/Debug/net6.0
+/Bookshelf/obj/Debug/net6.0
+/Bookshelf/obj
+/Bookshelf/wwwroot/books.zip
