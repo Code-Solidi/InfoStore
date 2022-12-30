@@ -22,7 +22,7 @@ namespace ToDos
         {
             this.Name = nameof(ToDosExtension).Replace("Extension", string.Empty);
             this.Set("Title", this.Name);
-            this.Set("Link", "ToDo/Index");
+            this.Set("Link", "/ToDo/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)

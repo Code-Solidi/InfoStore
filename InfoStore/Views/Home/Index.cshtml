@@ -4,5 +4,25 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>A brief "no nonsense" introduction to CoreXF (and OpenCQS).</p>
 </div>
+
+<h2>CoreXF</h2>
+<p>This little app shows how to use <a href="https://github.com/Code-Solidi/CoreXF">CoreXF</a> to build large and complex web sites. It consists of a host application and three extensions &ndash; <code>Bookmarks</code>, <code>Notes</code> and <code>ToDos</code>, which together form a certain functionality.</p>
+<p>The host application is "empty" and only provides infrastructure. Extensions are the source of business value.</p>
+<p>The idea of using multiple small, often <strong>independent parts (extensions)</strong> that contribute to the formation of a whole is not new. This is exactly what is demonstrated here.</p>
+<p>A small but important clarification: extensions often <strong>need to interact</strong> to produce the required functionality, however. For this purpose <a href="https://github.com/Code-Solidi/CoreXF">CoreXF</a>  <strong>extensions</strong> can benefit from <a href="https://github.com/Code-Solidi/CoreXF/tree/master/src/BackingServices">CoreXF.Eventing</a> or <a href="https://github.com/Code-Solidi/CoreXF/tree/master/src/BackingServices">CoreXF.Messaging</a>. This is not demonstrated here (see the examples in the <a href="https://github.com/Code-Solidi/CoreXF">GitHub repository</a>).</p>
+
+<h2>OpenCQS</h2>
+
+<p>OpenCQS is a small but performance-enhancing package that provides:</p>
+<ol>
+    <li>Separation of queries and commands from their execution</li>
+    <li>AOP-like "decoration" of implementations.</li>
+</ol>
+<p>
+    You can find more <a href="https://github.com/Code-Solidi/OpenCqs">here</a>.</p>
+
+<h2>This Application</h2>
+<p>Use the <a href="/Identity/Account/Login">demo account</a> to see it in actions. <strong>Data for the account will be deleted every now and then.</strong></p>
+<p>The full source code of this application can be found <a href="https://github.com/Code-Solidi/InfoStore">here</a>.</p>

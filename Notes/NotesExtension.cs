@@ -21,7 +21,7 @@ namespace Notes
         {
             this.Name = nameof(NotesExtension).Replace("Extension", string.Empty);
             this.Set("Title", this.Name);
-            this.Set("Link", "Note/Index");
+            this.Set("Link", "/Note/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)

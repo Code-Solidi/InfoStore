@@ -21,7 +21,7 @@ namespace Bookmarks
         {
             this.Name = nameof(BookmarksExtension).Replace("Extension", string.Empty);
             this.Set("Title", this.Name);
-            this.Set("Link", "Bookmark/Index");
+            this.Set("Link", "/Bookmark/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)
