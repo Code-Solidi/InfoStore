@@ -1,0 +1,35 @@
+﻿@using Microsoft.Extensions.FileProviders;
+@using System.Globalization;
+@model IEnumerable<IFileInfo>
+
+@{
+    Layout = "_Layout2";
+}
+
+<table class="table caption-top">
+    <caption>List of books</caption>
+    <thead>
+        <tr>
+            <th><span>Name</span></th>
+            <th class="text-end"><span class="pe-3">Length</span></th>
+            <th><span class="ps-3">Last&nbsp;Modified</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in this.Model.Where(info => !info.IsDirectory))
+        {
+            <tr class="">
+                <td><span><a href="./@HtmlEncode(file.Name)">@Html.Raw(HtmlEncode(file.Name))</a></span></td>
+                <td><span class="float-end">@Html.Raw(HtmlEncode(file.Length.ToString("n0", CultureInfo.CurrentCulture)))</span></td>
+                <td><span class="ps-3">@Html.Raw(@HtmlEncode(file.LastModified.ToString("yyyy-MM-dd hh:mm", CultureInfo.CurrentCulture)))</span></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    private string HtmlEncode(string body)
+    {
+        return HtmlEncoder.Encode(body);
+    }
+}
