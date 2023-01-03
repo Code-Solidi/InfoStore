@@ -22,3 +22,10 @@
 /ToDo/bin/Debug/net6.0
 /ToDo/Data/Migrations
 /ToDo/obj
+
+/Futures/Bookshelf/bin/Debug/net6.0
+/Futures/Bookshelf/Data/Migrations
+/Futures/Bookshelf/obj
+
+/.cr/personal/Navigation
+/Futures/Bookshelf/wwwroot/books

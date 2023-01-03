@@ -1,9 +1,14 @@
-﻿@using Microsoft.Extensions.FileProviders;
+﻿@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.Extensions.FileProviders;
 @using System.Globalization;
-@model IEnumerable<IFileInfo>
+@using System.Net;
+
+@inject IWebHostEnvironment environment
+
+@model IDirectoryContents
 
 @{
-    Layout = "_Layout2";
+    ViewData["Title"] = "Home Page";
 }
 
 <table class="table caption-top">
@@ -16,10 +21,19 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var file in this.Model.Where(info => !info.IsDirectory))
+        @foreach (var dir in this.Model.Where(x => x.IsDirectory))
         {
-            <tr class="">
-                <td><span><a href="./@HtmlEncode(file.Name)">@Html.Raw(HtmlEncode(file.Name))</a></span></td>
+            <tr>
+                <td><span><a href="/path/@HtmlEncode(dir.Name)">@Html.Raw(HtmlEncode(dir.Name))</a></span></td>
+                <td colspan="2"></td>
+            </tr>
+        }
+
+        @foreach (var file in this.Model.Where(x => !x.IsDirectory))
+        {
+            var path = file.PhysicalPath.Replace(this.environment.WebRootPath, string.Empty);
+            <tr>
+                <td><span><a href="/books/@HtmlEncode(file.Name)">@Html.Raw(HtmlEncode(file.Name))</a></span></td>
                 <td><span class="float-end">@Html.Raw(HtmlEncode(file.Length.ToString("n0", CultureInfo.CurrentCulture)))</span></td>
                 <td><span class="ps-3">@Html.Raw(@HtmlEncode(file.LastModified.ToString("yyyy-MM-dd hh:mm", CultureInfo.CurrentCulture)))</span></td>
             </tr>

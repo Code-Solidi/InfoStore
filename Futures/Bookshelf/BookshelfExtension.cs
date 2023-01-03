@@ -26,6 +26,7 @@ namespace Bookshelf
 
         public override void ConfigureServices(IServiceCollection services)
         {
+            /*
             // db context should be added in host app
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
             var connectionString = configuration.GetConnectionString("DefaultConnection")
@@ -36,6 +37,7 @@ namespace Bookshelf
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(typeof(BookshelfExtension).Assembly);
             services.AddHandlers(typeof(BookshelfExtension).Assembly);
+            */
         }
     }
 }

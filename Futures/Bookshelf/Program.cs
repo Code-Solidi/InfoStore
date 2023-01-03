@@ -34,28 +34,21 @@ namespace Bookshelf
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // todo: get from settings!
-            var fileProvider = new PhysicalFileProvider("E:\\Books");
-            var requestPath = "/Books";
-
             // Enable displaying browser links.
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = fileProvider,
-                RequestPath = requestPath
-            });
-
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                FileProvider = fileProvider,
-                RequestPath = requestPath,
-                Formatter = new DirectoryFormatter(/*HtmlEncoder.Default*/)
-            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    // todo: get path from settings!
+            //    FileProvider = new PhysicalFileProvider("E:\\Books")
+            //});
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.MapControllerRoute(
+                name: "bookshelf",
+                pattern: "path/{id?}", 
+                defaults: new {controller= "Bookshelf", action = "Index" });
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
