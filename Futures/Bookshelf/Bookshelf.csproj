@@ -20,7 +20,6 @@
   <ItemGroup>
     <Folder Include="Data\Entities\" />
     <Folder Include="Data\Handlers\" />
-    <Folder Include="wwwroot\books\" />
   </ItemGroup>
 
 </Project>

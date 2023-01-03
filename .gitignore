@@ -8,6 +8,7 @@
 /.vs/InfoStore/v17
 /.vs/ProjectEvaluation
 /.vs
+
 /Bookmarks/bin/Debug/net6.0
 /Bookmarks/obj
 /InfoStore/bin/Debug/net6.0
@@ -26,6 +27,8 @@
 /Futures/Bookshelf/bin/Debug/net6.0
 /Futures/Bookshelf/Data/Migrations
 /Futures/Bookshelf/obj
+/Futures/Bookshelf/wwwroot/books
 
 /.cr/personal/Navigation
-/Futures/Bookshelf/wwwroot/books
+*.zip
+
