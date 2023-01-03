@@ -45,10 +45,10 @@ namespace Bookshelf
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "bookshelf",
-                pattern: "path/{id?}", 
-                defaults: new {controller= "Bookshelf", action = "Index" });
+            //app.MapControllerRoute(
+            //    name: "bookshelf",
+            //    pattern: "folder/{id?}", 
+            //    defaults: new {controller= "Bookshelf", action = "Index" });
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

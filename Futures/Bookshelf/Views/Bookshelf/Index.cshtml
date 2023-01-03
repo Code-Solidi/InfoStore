@@ -3,9 +3,7 @@
 @using System.Globalization;
 @using System.Net;
 
-@inject IWebHostEnvironment environment
-
-@model IDirectoryContents
+@model BookshelfModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -21,19 +19,23 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var dir in this.Model.Where(x => x.IsDirectory))
+        @foreach (var dir in this.Model.Contents.Where(x => x.IsDirectory))
         {
+            var folder = this.Model.Directory.StartsWith('/') ? this.Model.Directory.Substring(1, this.Model.Directory.Length - 1) : this.Model.Directory;
+            var href = $"/Bookshelf/Index/?id={HtmlEncode(System.IO.Path.Combine(folder, dir.Name))}";
             <tr>
-                <td><span><a href="/path/@HtmlEncode(dir.Name)">@Html.Raw(HtmlEncode(dir.Name))</a></span></td>
-                <td colspan="2"></td>
+                <td>
+                    <span><a href="@href">@Html.Raw(HtmlEncode(dir.Name))</a></span>
+                </td>
+                <td><span class="float-end">[folder]</span></td>
+                <td></td>
             </tr>
         }
 
-        @foreach (var file in this.Model.Where(x => !x.IsDirectory))
+        @foreach (var file in this.Model.Contents.Where(x => !x.IsDirectory))
         {
-            var path = file.PhysicalPath.Replace(this.environment.WebRootPath, string.Empty);
             <tr>
-                <td><span><a href="/books/@HtmlEncode(file.Name)">@Html.Raw(HtmlEncode(file.Name))</a></span></td>
+                <td><span><a href="/books/@HtmlEncode(this.Model.Directory)/@HtmlEncode(file.Name)">@Html.Raw(HtmlEncode(file.Name))</a></span></td>
                 <td><span class="float-end">@Html.Raw(HtmlEncode(file.Length.ToString("n0", CultureInfo.CurrentCulture)))</span></td>
                 <td><span class="ps-3">@Html.Raw(@HtmlEncode(file.LastModified.ToString("yyyy-MM-dd hh:mm", CultureInfo.CurrentCulture)))</span></td>
             </tr>

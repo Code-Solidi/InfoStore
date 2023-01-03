@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Bookshelf.Models;
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 
@@ -16,14 +18,14 @@ namespace Bookshelf.Controllers
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment), $"{nameof(environment)} is null.");
         }
 
-        //public IActionResult Index([FromRoute(Name = "id")] string id = default)
-        //[Route(Name =)]
-        public IActionResult Index([FromRoute(Name = "id")]string subpath)
+        public IActionResult Index(string id)
         {
+            var subpath = id ?? string.Empty;
             var wwwroot = this.environment.WebRootPath;
             var fileProvider = new PhysicalFileProvider(Path.Combine(wwwroot, "books"));
-            var contents = fileProvider.GetDirectoryContents(subpath ?? string.Empty);
-            return View(contents);
+            var contents = fileProvider.GetDirectoryContents(subpath);
+            var model = new BookshelfModel(subpath, contents);
+            return View(model);
         }
     }
 }
