@@ -24,10 +24,7 @@ namespace Bookshelf.Controllers
 
         public IActionResult Index(string id)
         {
-            // https://stackoverflow.com/questions/575440/url-encoding-using-c-sharp
-            //var subpath = HttpUtility.UrlEncode(id) ?? string.Empty;
             var subpath = id ?? string.Empty;
-
             var wwwroot = this.environment.WebRootPath;
             var booksroot = Path.Combine(wwwroot, "books");
             var fileProvider = new PhysicalFileProvider(booksroot);

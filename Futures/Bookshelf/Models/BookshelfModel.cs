@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Internal;
 
 using System.Collections.Generic;
 
 namespace Bookshelf.Models
 {
-    public class BookshelfModel
+    public class BookshelfModel 
     {
         public BookshelfModel(string directory, IDirectoryContents contents, IDictionary<string, string> nameMap)
         {
@@ -14,6 +15,7 @@ namespace Bookshelf.Models
         }
 
         public IDirectoryContents Contents { get; init; }
+
 
         public string Directory { get; init; }
 
