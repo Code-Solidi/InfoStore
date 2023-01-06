@@ -32,3 +32,5 @@
 /.cr/personal/Navigation
 *.zip
 
+/Bookshelf/bin/Debug/net6.0
+/Bookshelf/obj

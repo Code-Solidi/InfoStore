@@ -21,7 +21,7 @@ namespace Bookshelf
         {
             this.Name = nameof(BookshelfExtension).Replace("Extension", string.Empty);
             this.Set("Title", this.Name);
-            this.Set("Link", "/Bookmark/Index");
+            this.Set("Link", "/Bookshelf/Index");
         }
 
         public override void ConfigureServices(IServiceCollection services)

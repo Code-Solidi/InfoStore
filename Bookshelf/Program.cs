@@ -1,12 +1,17 @@
 using Bookshelf.Code;
 
+using CoreXF.Abstractions.Base;
+using CoreXF.Abstractions.Registry;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.Encodings.Web;
 
 namespace Bookshelf
@@ -19,7 +24,7 @@ namespace Bookshelf
 
             // Add services to the container.
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            builder.Services.AddDirectoryBrowser();
+            builder.Services.AddTransient<IExtensionsRegistry, DummyExtensionRegistry>();
 
             var app = builder.Build();
 
@@ -34,26 +39,35 @@ namespace Bookshelf
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // Enable displaying browser links.
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    // todo: get path from settings!
-            //    FileProvider = new PhysicalFileProvider("E:\\Books")
-            //});
-
             app.UseRouting();
 
             app.UseAuthorization();
 
-            //app.MapControllerRoute(
-            //    name: "bookshelf",
-            //    pattern: "folder/{id?}", 
-            //    defaults: new {controller= "Bookshelf", action = "Index" });
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+        }
+    }
+
+    public class DummyExtensionRegistry : IExtensionsRegistry
+    {
+        public IEnumerable<IExtension> Extensions { get; }
+
+        public T GetExtension<T>() where T : IExtension
+        {
+            return default;
+        }
+
+        public IExtension GetExtension(string name)
+        {
+            return default;
+        }
+
+        public IExtension GetExtension(Assembly assembly)
+        {
+            return default;
         }
     }
 }

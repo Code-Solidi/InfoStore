@@ -1,5 +1,7 @@
 ﻿using Bookshelf.Models;
 
+using CoreXF.Abstractions.Attributes;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -11,6 +13,7 @@ using System.Diagnostics;
 
 namespace Bookshelf.Controllers
 {
+    [CoreXFIgnore]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -1,0 +1,124 @@
+﻿@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.Extensions.FileProviders;
+@using System.Globalization;
+@using System.Net;
+@using System.Security.Claims;
+
+@model BookshelfModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="pill" aria-current="page" href="#upload">Upload File</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#create-folder">Create Folder</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="upload">
+        <div class="card border-top-0">
+            <form class="mb-3" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <input class="form-control" type="file" id="formFile" name="file" accept=".txt,.epub,.pdf" />
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary float-end" type="submit">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="create-folder">
+        <div class="card border-top-0">
+            <form class="mb-3" method="post" asp-action="CreateFolder">
+                <div class="input-group card-body">
+                    <span class="input-group-text" id="basic-addon1">Create Folder...</span>
+                    <input class="form-control" type="text" name="directory" placeholder="Enter folder name" aria-label="Create Folder" aria-describedby="basic-addon1" />
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary float-end" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (this.ViewBag.Message != null)
+{
+    <div class="alert" style="margin-top:20px">
+        @this.ViewBag.Message
+    </div>
+}
+
+<form class="mt-3 mb-3" method="post" asp-action="Back">
+    <button class="btn btn-primary" type="submit">Back</button>
+</form>
+
+<table class="table caption-top">
+    <caption>List of books</caption>
+    <thead>
+        <tr>
+            <th><span>Name</span></th>
+            <th class="text-end"><span class="pe-3">Length</span></th>
+            <th><span class="ps-3">Last&nbsp;Modified</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dir in this.Model.Contents.Where(x => x.IsDirectory))
+        {
+            var name = dir.Name;
+            var encoded = this.Model.nameMap.SingleOrDefault(x => x.Value == name).Key;
+            if (!string.IsNullOrEmpty(encoded))
+            {
+                var folder = this.Model.Directory.StartsWith('/') ? this.Model.Directory.Substring(1, this.Model.Directory.Length - 1) : this.Model.Directory;
+                var uri = $"/Bookshelf/Index/?id={System.IO.Path.Combine(folder, encoded).Replace('\\', '/')}";
+                <tr>
+                    <td>
+                        <span><a href="@uri">@Html.Raw(HtmlEncode(dir.Name))</a></span>
+                    </td>
+                    <td><span class="float-end">[folder]</span></td>
+                    <td></td>
+                </tr>
+            }
+        }
+
+        @foreach (var file in this.Model.Contents.Where(x => !x.IsDirectory))
+        {
+            var name = file.Name;
+            var encoded = this.Model.nameMap.SingleOrDefault(x => x.Value == name).Key;
+            if (!string.IsNullOrEmpty(encoded))
+            {
+                var uri = $"/Books/{this.Model.Directory}/{file.Name}";
+                <tr>
+                    <td><span><a href="@uri" target="_blank">@Html.Raw(HtmlEncode(name))</a></span></td>
+                    <td><span class="float-end">@Html.Raw(HtmlEncode(file.Length.ToString("n0", CultureInfo.CurrentCulture)))</span></td>
+                    <td><span class="ps-3">@Html.Raw(@HtmlEncode(file.LastModified.ToString("yyyy-MM-dd hh:mm", CultureInfo.CurrentCulture)))</span></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<form class="mt-3 mb-3" method="post" asp-action="Back">
+    <button class="btn btn-primary" type="submit">Back</button>
+</form>
+
+@functions {
+    private string HtmlEncode(string body)
+    {
+        return HtmlEncoder.Encode(body);
+    }
+}
+
+@section Styles {
+    <style>
+        .card-footer {
+            border-top: 0;
+            background-color: inherit;
+        }
+    </style>
+}
