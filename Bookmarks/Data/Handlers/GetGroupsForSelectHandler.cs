@@ -24,10 +24,13 @@ namespace Bookmarks.Data.Handlers
 
         public override IEnumerable<BookmarkListModel.GroupSelect> Handle(GetGroupsForSelectQuery query)
         {
-            var groups = this.dbContext.Set<Group>();
-            return groups.OrderBy(x => x.Name)
-                .Select(x => new BookmarkListModel.GroupSelect { Id = x.Id, Name = x.Name })
-                .AsNoTracking();
+            var groups = this.dbContext.Set<Group>().OrderBy(x => x.Name).AsQueryable();
+            if (query.Nonempty)
+            {
+                groups = groups.Where(x => x.Bookmarks.Count > 0);
+            }
+
+            return groups.Select(x => new BookmarkListModel.GroupSelect { Id = x.Id, Name = x.Name }).AsNoTracking();
         }
     }
 }

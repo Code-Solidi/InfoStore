@@ -34,3 +34,11 @@
 
 /Bookshelf/bin/Debug/net6.0
 /Bookshelf/obj
+/Bookmarks/appsettings.json
+/Bookmarks/appsettings.Development.json
+/InfoStore/appsettings.json
+/InfoStore/appsettings.Development.json
+/Notes/appsettings.json
+/Notes/appsettings.Development.json
+/ToDo/appsettings.json
+/ToDo/appsettings.Development.json

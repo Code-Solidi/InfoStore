@@ -30,6 +30,11 @@
     margin-right: 0.5em; /*just extra space between text and icon*/
 }
 
+.accordion-collapse {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 div#accordion-add-to-group .accordion-button {
     padding: 0;
 }

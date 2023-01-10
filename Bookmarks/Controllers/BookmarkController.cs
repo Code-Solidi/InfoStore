@@ -3,8 +3,6 @@ using Bookmarks.Models;
 using Bookmarks.UseCases.Commands;
 using Bookmarks.UseCases.Queries;
 
-using CoreXF.Abstractions.Attributes;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,7 +16,7 @@ using System.Security.Claims;
 
 namespace Bookmarks.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class BookmarkController : Controller
     {
         private readonly ILogger<BookmarkController> logger;

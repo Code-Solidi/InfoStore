@@ -59,7 +59,7 @@
 </form>
 
 <table class="table caption-top">
-    <caption>List of books</caption>
+    <caption>List of books in: <strong>@this.GetDirectory(this.Model.Directory)</strong></caption>
     <thead>
         <tr>
             <th><span>Name</span></th>
@@ -111,6 +111,13 @@
     private string HtmlEncode(string body)
     {
         return HtmlEncoder.Encode(body);
+    }
+
+    private string GetDirectory(string directory)
+    {
+        var parts = directory.Split('/').AsEnumerable();
+        parts = parts.Skip(1);
+        return $"/{string.Join('/', parts)}";
     }
 }
 
