@@ -15,108 +15,137 @@
     <p>&mdash;&nbsp;Never loose your bookmarks again&nbsp;&mdash;</p>
 </div>
 
-<div class="accordion mb-3" id="accordion">
-    <div class="accordion-item">
-        <h2 class="accordion-header card-title" id="panels-headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panels-collapseOne" aria-expanded="false" aria-controls="panels-collapseOne">
-                <strong>Filter</strong>
-            </button>
-        </h2>
-        <div id="panels-collapseOne" class="accordion-collapse collapse" aria-labelledby="panels-headingOne">
-            <div class="accordion-body">
-                <partial name="_Filter" model=@this.Model />
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="pill" aria-current="page" href="#add-bookmark">Add Bookmark</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#search-bookmark">Find in Bookmarks</a>
+    </li>
+</ul>
+
+<div class="tab-content mb-3">
+    <div class="tab-pane active" id="add-bookmark">
+        <div class="card border-top-0 p-4">
+            <form asp-action="Index">
+                <div class="form-group row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <input asp-for="Url" class="form-control" aria-label="Find in bookmarks" aria-describedby="add-bookmark" placeholder="Enter the URL to bookmark" />
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                        <div class="text-danger">@this.GetString(Html.ValidationMessageFor(x => x.Url))</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane" id="search-bookmark">
+        <div class="card border-top-0 p-4">
+            <div class="form-group row">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input id="search-input" asp-for="Filter.Search" class="form-control" aria-label="Find in bookmarks" aria-describedby="search-addon" placeholder="Search in Title or URL" />
+                        <button type="button" id="search-button" class="btn btn-primary">Search</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="clear-search">Clear</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<form asp-action="Index">
-    <div class="form-group row mb-3">
-        <div class="col-11">
-            <input asp-for="Url" class="form-control" placeholder="Enter the URL to bookmark" />
-            <div class="text-danger">@this.GetString(Html.ValidationMessageFor(x => x.Url))</div>
-        </div>
-        <div class="col-1">
-            <div class="d-grid">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </div>
-    </div>
-</form>
+<div class="accordion" id="accordion-groups">
+    @{
+        var first = true;
+        foreach (var group in this.Model.GetGroups(nonempty: true))
+        {
+            var groupName = this.GetName(group);
+            var show = first ? "show" : string.Empty;
+            var collapsed = !first ? "collapsed" : string.Empty;
+            first = false;
 
-<table class="table table-borderless table-sm">
-    <thead>
-        <tr>
-            <th scope="col" class="em-2">#</th>
-            <th scope="col" class="em-6 text-center">Details</th>
-            <th scope="col" class="em-25">Group</th>
-            <th scope="col">Title (or URL)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var bookmarks = this.Model.GetBookmarks();
-            for (var index = 0; index < bookmarks.Count(); index++)
-            {
-                var item = bookmarks[index];
-                <tr>
-                    <td scope="row">@(index + 1).</td>
-                    <td class="text-center">
-                        <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
-                            <i class="bi bi-arrow-clockwise"></i>
-                        </a>
-                    </td>
-                    <td>
-                        @{
-                            var buttonText = string.IsNullOrWhiteSpace(item.Group) ? "Select" : item.Group;
-                            var buttonId = $"dropdownMenuGroup-{index}";
-                            <div class="dropdown">
-                                <div class="truncate dropdown-toggle" type="button" id="@buttonId" data-item-id="@item.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @buttonText
-                                </div>
-                                <ul class="dropdown-menu" id="accordion-add-to-group" aria-labelledby="@buttonId">
-                                    @{
-                                        var groups = this.Model?.GetGroups() ?? Array.Empty<BookmarkListModel.GroupSelect>();
-                                        foreach (var group in groups)
-                                        {
-                                            <li><a class="dropdown-item" href="#" data-group-id="@group.Id">@group.Name</a></li>
-                                        }
-
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#">Clear</a></li>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-@groupName">
+                    <button class="accordion-button @collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@groupName" aria-expanded="@first" aria-controls="collapseOne">
+                        @group.Name
+                    </button>
+                </h2>
+                <div id="collapse-@groupName" class="accordion-collapse collapse @show" aria-labelledby="heading-@groupName" data-bs-parent="#accordion-groups">
+                    <div class="accordion-body">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="em-2">#</th>
+                                    <th scope="col" class="em-6 text-center">Details</th>
+                                    <th scope="col">Title (or URL)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var bookmarks = this.Model.GetBookmarks(group.Name).ToArray();
+                                    for (var index = 0; index < bookmarks.Count(); index++)
+                                    {
+                                        var item = bookmarks[index];
+                                        <tr>
+                                            <td scope="row">@(index + 1).</td>
+                                            <td class="text-center">
+                                                <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
+                                                    <i class="bi bi-arrow-clockwise"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="@item.Url" target="_blank">
+                                                    <span class="truncate" title="@this.GetUrlOrTitleHint(item)">
+                                                        @this.GetUrlOrTitle(item)
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="p-0">
+                                                <div class="collapse" id="collapse-@index">
+                                                    <div class="card ml-4 p-2">
+                                                        <div class="card-body">
+                                                            @this.GetItemDescription(item)
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <a title="Edit" class="btn btn-primary" href="/bookmark/edit/@item.Id">Modify</a>
+                                                            <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
+                                                            <div class="dropdown btn btn-primary">
+                                                                <div class="truncate dropdown-toggle" type="button" id="dropdownMenuGroup-0" data-item-id="ad310c0a-617a-4eec-f173-08daec8d0d74" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    @item.Group
+                                                                </div>
+                                                                <ul class="dropdown-menu" id="accordion-add-to-group" aria-labelledby="dropdownMenuGroup-0">
+                                                                    @foreach (var g in this.Model.GetGroups())
+                                                                    {
+                                                                        <li><a class="dropdown-item" href="#" data-group-id="@g.Id">@g.Name</a></li>
+                                                                    }
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li><a class="dropdown-item" href="#">Clear</a></li>
+                                                                </ul>
+                                                            </div>
+                                                            <a class="btn btn-secondary float-end" href="/bookmark/groups">Groups</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     }
-                                </ul>
-                            </div>
-                        }
-                    </td>
-                    <td>
-                        <a href="@item.Url" target="_blank">
-                            <span class="truncate" title="@this.GetUrlOrTitleHint(item)">
-                                @this.GetUrlOrTitle(item)
-                            </span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="p-0">
-                        <div class="collapse" id="collapse-@index">
-                            <div class="card ml-4 p-2">
-                                <div class="card-body">
-                                    @this.GetItemDescription(item)
-                                </div>
-                                <div class="card-footer">
-                                    <a title="Edit" class="btn btn-primary" href="/bookmark/edit/@item.Id">Modify</a>
-                                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
-                                    <a class="btn btn-secondary float-end" href="/bookmark/groups">Groups</a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    }
+</div>
 
 <div class="modal fade" id="confirmDeleteleModal" tabindex="-1" aria-labelledby="confirmDeleteleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -138,6 +167,13 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/accordion-patch.css" asp-append-version="true" />
+    <style>
+        /*div.card-footer > .dropdown {
+                    width: 30%;
+                    display: inline-block;
+                    vertical-align: middle;
+                }*/
+    </style>
 }
 
 @section Scripts {
@@ -171,7 +207,7 @@
             window.location.href = '/bookmark/index/?search=' + searchText;
         });
 
-        $('button#clear-search-button').on('click', function (e) {
+        $('a#clear-search').on('click', function (e) {
             e.preventDefault();
             window.location.href = '/bookmark/index/';
         });
@@ -219,5 +255,21 @@
     IHtmlContent GetUrlOrTitleHint(BookmarkModel bookmark)
     {
         return new HtmlString(string.IsNullOrEmpty(bookmark.Title) ? string.Empty : bookmark.Url);
+    }
+
+    string GetName(BookmarkListModel.GroupSelect group)
+    {
+        var name = new List<char>();
+        if (char.IsLetter(group.Name[0]))
+        {
+            name.Add(group.Name[0]);
+        }
+
+        foreach (var ch in group.Name.Skip(1).Where(x => char.IsLetterOrDigit(x)))
+        {
+            name.Add(ch);
+        }
+
+        return new string(name.ToArray()); //group.Name.Replace(".", "dot").Replace(" ", string.Empty);
     }
 }

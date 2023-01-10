@@ -38,14 +38,14 @@ namespace Bookmarks.Models
 
         public BookmarkFilter Filter { get; init; }
 
-        public GroupSelect[] GetGroups()
+        public GroupSelect[] GetGroups(bool nonempty = false)
         {
-            return this.getGroups?.Handle(new GetGroupsForSelectQuery()).ToArray() ?? Array.Empty<GroupSelect>();
+            return this.getGroups?.Handle(new GetGroupsForSelectQuery(nonempty)).ToArray() ?? Array.Empty<GroupSelect>();
         }
 
-        public BookmarkModel[] GetBookmarks()
+        public BookmarkModel[] GetBookmarks(string group)
         {
-            var bookmarksQuery = new GetBookmarksQuery { Group = this.Filter?.Group, Search = this.Filter?.Search };
+            var bookmarksQuery = new GetBookmarksQuery { Group = group, Search = this.Filter?.Search };
             return this.getBookmarks?.Handle(bookmarksQuery).ToArray() ?? Array.Empty<BookmarkModel>();
         }
 
