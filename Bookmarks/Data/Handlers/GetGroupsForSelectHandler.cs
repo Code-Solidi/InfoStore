@@ -24,7 +24,7 @@ namespace Bookmarks.Data.Handlers
 
         public override IEnumerable<BookmarkListModel.GroupSelect> Handle(GetGroupsForSelectQuery query)
         {
-            var groups = this.dbContext.Set<Group>().OrderBy(x => x.Name).AsQueryable();
+            var groups = this.dbContext.Set<Group>().Include(x => x.Bookmarks).OrderBy(x => x.Name).AsQueryable();
             if (query.Nonempty)
             {
                 groups = groups.Where(x => x.Bookmarks.Count > 0);

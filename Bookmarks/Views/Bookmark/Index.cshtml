@@ -63,33 +63,34 @@
 <div class="accordion" id="accordion-groups">
     @{
         var first = true;
+        var allGroups = this.Model.GetGroups();
         foreach (var group in this.Model.GetGroups(nonempty: true))
         {
             var groupName = this.GetName(group);
             var show = first ? "show" : string.Empty;
             var collapsed = !first ? "collapsed" : string.Empty;
             first = false;
-
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading-@groupName">
-                    <button class="accordion-button @collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@groupName" aria-expanded="@first" aria-controls="collapseOne">
-                        @group.Name
-                    </button>
-                </h2>
-                <div id="collapse-@groupName" class="accordion-collapse collapse @show" aria-labelledby="heading-@groupName" data-bs-parent="#accordion-groups">
-                    <div class="accordion-body">
-                        <table class="table table-borderless table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="em-2">#</th>
-                                    <th scope="col" class="em-6 text-center">Details</th>
-                                    <th scope="col">Title (or URL)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var bookmarks = this.Model.GetBookmarks(group.Name).ToArray();
-                                    for (var index = 0; index < bookmarks.Count(); index++)
+            var bookmarks = this.Model.GetBookmarks(group.Name).ToArray();
+            if (bookmarks.Count() != 0)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-@groupName">
+                        <button class="accordion-button @collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@groupName" aria-expanded="@first" aria-controls="collapseOne">
+                            @group.Name
+                        </button>
+                    </h2>
+                    <div id="collapse-@groupName" class="accordion-collapse collapse @show" aria-labelledby="heading-@groupName" data-bs-parent="#accordion-groups">
+                        <div class="accordion-body">
+                            <table class="table table-borderless table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="em-2">#</th>
+                                        <th scope="col" class="em-6 text-center">Details</th>
+                                        <th scope="col">Title (or URL)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var index = 0; index < bookmarks.Count(); index++)
                                     {
                                         var item = bookmarks[index];
                                         <tr>
@@ -122,9 +123,9 @@
                                                                     @item.Group
                                                                 </div>
                                                                 <ul class="dropdown-menu" id="accordion-add-to-group" aria-labelledby="dropdownMenuGroup-0">
-                                                                    @foreach (var g in this.Model.GetGroups())
+                                                                    @foreach (var g in allGroups)
                                                                     {
-                                                                        <li><a class="dropdown-item" href="#" data-group-id="@g.Id">@g.Name</a></li>
+                                                                        <li><a class="dropdown-item" href="#" data-group-id="@g.Id" data-item-id="@item.Id">@g.Name</a></li>
                                                                     }
                                                                     <li><hr class="dropdown-divider"></li>
                                                                     <li><a class="dropdown-item" href="#">Clear</a></li>
@@ -137,6 +138,81 @@
                                             </td>
                                         </tr>
                                     }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        var bookmarksNoGroup = this.Model.GetBookmarks().ToArray();
+        if (bookmarksNoGroup.Count() != 0)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-nogroup">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-nogroup" aria-expanded="@first" aria-controls="collapseOne">
+                        No Group (Select One...)
+                    </button>
+                </h2>
+                <div id="collapse-nogroup" class="accordion-collapse collapse" aria-labelledby="heading-nogroup" data-bs-parent="#accordion-groups">
+                    <div class="accordion-body">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="em-2">#</th>
+                                    <th scope="col" class="em-6 text-center">Details</th>
+                                    <th scope="col">Title (or URL)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var index = 0; index < bookmarksNoGroup.Count(); index++)
+                                {
+                                    var item = bookmarksNoGroup[index];
+                                    <tr>
+                                        <td scope="row">@(index + 1).</td>
+                                        <td class="text-center">
+                                            <a href="#" title="View details" class="text-center" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="false" aria-controls="collapse-@index">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@item.Url" target="_blank">
+                                                <span class="truncate" title="@this.GetUrlOrTitleHint(item)">
+                                                    @this.GetUrlOrTitle(item)
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="p-0">
+                                            <div class="collapse" id="collapse-@index">
+                                                <div class="card ml-4 p-2">
+                                                    <div class="card-body">
+                                                        @this.GetItemDescription(item)
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <a title="Edit" class="btn btn-primary" href="/bookmark/edit/@item.Id">Modify</a>
+                                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteleModal" data-item-id="@item.Id">Delete</a>
+                                                        <div class="dropdown btn btn-primary">
+                                                            <div class="truncate dropdown-toggle" type="button" id="dropdownMenuGroup-0" data-item-id="ad310c0a-617a-4eec-f173-08daec8d0d74" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Select
+                                                            </div>
+                                                            <ul class="dropdown-menu" id="accordion-add-to-group" aria-labelledby="dropdownMenuGroup-0">
+                                                                @foreach (var g in allGroups)
+                                                                {
+                                                                    <li><a class="dropdown-item" href="#" data-group-id="@g.Id" data-item-id="@item.Id">@g.Name</a></li>
+                                                                }
+                                                                <li><hr class="dropdown-divider"></li>
+                                                                <li><a class="dropdown-item" href="#">Clear</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <a class="btn btn-secondary float-end" href="/bookmark/groups">Groups</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -166,14 +242,7 @@
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/accordion-patch.css" asp-append-version="true" />
-    <style>
-        /*div.card-footer > .dropdown {
-                    width: 30%;
-                    display: inline-block;
-                    vertical-align: middle;
-                }*/
-    </style>
+    <link rel="stylesheet" href="~/css/accordion-patch.css" />
 }
 
 @section Scripts {
@@ -181,24 +250,14 @@
         $('.dropdown-menu#accordion-add-to-group li a').on('click', function () {
             var selText = $(this).text();
             if (selText === 'Clear') selText = 'Select';
-            var toggle = $(this).parents('.dropdown').find('.dropdown-toggle');
-            var itemId = $(toggle).attr('data-item-id');
+            var itemId = $(this).attr('data-item-id');
             var groupId = $(this).attr('data-group-id');
-            $(toggle).html(selText + ' <span class="caret"></span>');
-            $.post('/bookmark/setgroup/' + itemId, { groupId: groupId });
-        });
-
-        $('.dropdown-menu#filter-select-group li a').on('click', function () {
-            var selText = $(this).text();
-            if (selText === 'All') selText = 'All';
             var toggle = $(this).parents('.dropdown').find('.dropdown-toggle');
-            var itemId = $(toggle).attr('data-item-id');
-            var groupId = $(this).attr('data-group-id');
             $(toggle).html(selText + ' <span class="caret"></span>');
-            if (selText === 'All')
-                window.location.href = '/bookmark/index/';
-            else
-                window.location.href = '/bookmark/index/?group=' + selText;
+            $.post('/bookmark/setgroup/' + itemId, { groupId: groupId }, function (data, status) {
+                if (status === "success")
+                    window.location.href = '/bookmark/index/';  // refresh
+            });
         });
 
         $('button#search-button').on('click', function (e) {

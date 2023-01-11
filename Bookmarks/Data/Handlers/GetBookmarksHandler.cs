@@ -26,29 +26,30 @@ namespace Bookmarks.Data.Handlers
 
         public override IEnumerable<BookmarkModel> Handle(GetBookmarksQuery query)
         {
-            var bookmarks = this.dbContext.Set<Bookmark>().AsQueryable().Include(x => x.Group);
-            var queryResult = bookmarks.AsQueryable();
+            var bookmarks = this.dbContext.Set<Bookmark>().AsQueryable().Include(x => x.Group).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.Group))
             {
-                queryResult = bookmarks.Where(x => x.Group.Name == query.Group);
+                bookmarks = bookmarks.Where(x => x.Group.Name == query.Group);
+            }
+            else
+            {
+                bookmarks = bookmarks.Where(x => x.Group == default);
             }
 
             if (!string.IsNullOrWhiteSpace(query.Search))
             {
-                queryResult = bookmarks.Where(x => EF.Functions.Like(x.Title, $"%{query.Search}%") || EF.Functions.Like(x.Url, $"%{query.Search}%"));
+                bookmarks = bookmarks.Where(x => EF.Functions.Like(x.Title, $"%{query.Search}%") || EF.Functions.Like(x.Url, $"%{query.Search}%"));
             }
 
-            return queryResult.OrderBy(x => x.Group.Name)
-                .Select(x => new BookmarkModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Url = x.Url,
-                    Description = CommonMarkConverter.Convert(x.Description, default),
-                    Group = x.Group.Name
-                })
-                .AsNoTracking();
+            return bookmarks.Select(x => new BookmarkModel
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Url = x.Url,
+                Description = CommonMarkConverter.Convert(x.Description, default),
+                Group = x.Group.Name
+            }).AsNoTracking();
         }
     }
 }
