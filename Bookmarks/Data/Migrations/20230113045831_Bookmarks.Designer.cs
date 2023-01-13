@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookmarks.Data.Migrations
 {
     [DbContext(typeof(BookmarksDbContext))]
-    [Migration("20221221154731_BookmarksInit")]
-    partial class BookmarksInit
+    [Migration("20230113045831_Bookmarks")]
+    partial class Bookmarks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,6 +73,11 @@ namespace Bookmarks.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
