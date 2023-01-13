@@ -1,11 +1,19 @@
 ﻿using OpenCqs;
 
+using System;
+
 namespace Bookmarks.UseCases.Queries
 {
     public class GetBookmarksQuery : IQuery
     {
-        public string Group { get; set; }
+        public GetBookmarksQuery(string group, string search = default)
+        {
+            this.Group = group;
+            this.Search = search;
+        }
 
-        public string Search { get; set; }
+        public string Group { get; init; }
+
+        public string Search { get; init; }
     }
 }

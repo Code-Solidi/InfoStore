@@ -21,9 +21,9 @@ namespace Bookmarks.Models
             , IQueryHandler<GetGroupsForSelectQuery, IEnumerable<GroupSelect>> getGroups
             , BookmarkFilter filter = default)
         {
-            this.Filter = filter;
             this.getBookmarks = getBookmarks ?? throw new ArgumentNullException(nameof(getBookmarks), $"{nameof(getBookmarks)} is null.");
             this.getGroups = getGroups ?? throw new ArgumentNullException(nameof(getGroups), $"{nameof(getGroups)} is null.");
+            this.Filter = filter;
         }
 
         public Guid Id { get; set; }
@@ -43,9 +43,9 @@ namespace Bookmarks.Models
             return this.getGroups?.Handle(new GetGroupsForSelectQuery(nonempty)).ToArray() ?? Array.Empty<GroupSelect>();
         }
 
-        public BookmarkModel[] GetBookmarks(string group)
+        public BookmarkModel[] GetBookmarks(string group = default)
         {
-            var bookmarksQuery = new GetBookmarksQuery { Group = group, Search = this.Filter?.Search };
+            var bookmarksQuery = new GetBookmarksQuery(group, this.Filter?.Search);
             return this.getBookmarks?.Handle(bookmarksQuery).ToArray() ?? Array.Empty<BookmarkModel>();
         }
 
@@ -58,15 +58,12 @@ namespace Bookmarks.Models
 
         public class BookmarkFilter
         {
-            public BookmarkFilter(string group, string search)
+            public BookmarkFilter(string search)
             {
-                this.Group = group;
                 this.Search = search;
             }
 
             public string Search { get; init; }
-
-            public string Group { get; init; }
         }
     }
 

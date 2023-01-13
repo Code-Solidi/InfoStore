@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notes.Data.Migrations
 {
-    public partial class NotesInit : Migration
+    public partial class Notes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

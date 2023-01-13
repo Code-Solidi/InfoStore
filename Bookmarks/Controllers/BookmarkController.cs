@@ -16,7 +16,7 @@ using System.Security.Claims;
 
 namespace Bookmarks.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BookmarkController : Controller
     {
         private readonly ILogger<BookmarkController> logger;
@@ -62,9 +62,9 @@ namespace Bookmarks.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public IActionResult Index(string group, string search)
+        public IActionResult Index(string search)
         {
-            var filter = new BookmarkListModel.BookmarkFilter(group, search);
+            var filter = new BookmarkListModel.BookmarkFilter(search);
             this.TempData["Title"] = "Bookmarks";
             return this.View(new BookmarkListModel(this.getBookmarks, this.getGroupsForSelect, filter));
         }

@@ -21,8 +21,8 @@ namespace Bookmarks.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(BookmarksDbContext).Assembly);
-            //builder.Entity<Bookmark>().HasQueryFilter(x => x.UserId == this.UserId);
-            //builder.Entity<Group>().HasQueryFilter(x => x.UserId == this.UserId);
+            builder.Entity<Bookmark>().HasQueryFilter(x => x.UserId == this.UserId);
+            builder.Entity<Group>().HasQueryFilter(x => x.UserId == this.UserId);
         }
 
         private string UserId

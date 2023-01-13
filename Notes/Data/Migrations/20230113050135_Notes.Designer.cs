@@ -12,8 +12,8 @@ using Notes.Data;
 namespace Notes.Data.Migrations
 {
     [DbContext(typeof(NotesDbContext))]
-    [Migration("20221221161842_NotesInit")]
-    partial class NotesInit
+    [Migration("20230113050135_Notes")]
+    partial class Notes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
