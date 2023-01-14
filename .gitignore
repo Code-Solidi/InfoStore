@@ -47,3 +47,11 @@
 /InfoStore/appsettings.json
 /Notes/appsettings.json
 /ToDo/appsettings.json
+/Bookmarks/bin/Release/net6.0
+/Bookmarks/Properties/PublishProfiles/Remote.pubxml
+/Bookshelf/bin/Release/net6.0
+*.pubxml
+/InfoStore/bin/Release/net6.0
+/Notes/bin/Release/net6.0
+/Publish
+/ToDo/bin/Release/net6.0
