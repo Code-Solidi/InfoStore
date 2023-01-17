@@ -92,7 +92,7 @@
             var encoded = this.Model.nameMap.SingleOrDefault(x => x.Value == name).Key;
             if (!string.IsNullOrEmpty(encoded))
             {
-                var uri = $"/Books/{this.Model.Directory}/{file.Name}";
+                var uri = $"/books/{this.Model.Directory}/{file.Name}";
                 <tr>
                     <td><span><a href="@uri" target="_blank">@Html.Raw(HtmlEncode(name))</a></span></td>
                     <td><span class="float-end">@Html.Raw(HtmlEncode(file.Length.ToString("n0", CultureInfo.CurrentCulture)))</span></td>
