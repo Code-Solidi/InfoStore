@@ -8,9 +8,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "Spikes\ConsoleApp1\ConsoleApp1.csproj", "{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E9BE049-91E9-4B30-9E00-F9FF9B7AA776} = {B59BFD96-E1E6-4DF8-BA54-354B8D788737}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27A71C8A-6EBC-4028-9CCF-9AADB659ED33}
