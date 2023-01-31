@@ -27,7 +27,7 @@ namespace Bookmarks.Data.Entities.Configurations
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(450); // Id length in Identity
 
             builder.Property(x => x.Url).IsRequired().HasMaxLength(MaxUrlLength);
-            builder.HasIndex(x => x.Url).IsUnique();
+            builder.HasIndex(x => new { x.Url, x.UserId }).IsUnique();
 
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(450); // Id length in Identity
             builder.Property(x => x.Title).HasMaxLength(MaxTitleLength);

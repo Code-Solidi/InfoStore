@@ -4,6 +4,10 @@
         <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="Data\Migrations\20230113045831_Bookmarks.cs" />
+      <Compile Remove="Data\Migrations\20230113045831_Bookmarks.Designer.cs" />
+    </ItemGroup>
+    <ItemGroup>
       <_WebToolingArtifacts Remove="Properties\PublishProfiles\Remote.pubxml" />
     </ItemGroup>
 
@@ -20,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Data\Migrations\" />
+      <None Include="Data\Migrations\20230113045831_Bookmarks.cs" />
+      <None Include="Data\Migrations\20230113045831_Bookmarks.Designer.cs" />
     </ItemGroup>
 </Project>
